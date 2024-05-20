@@ -1,6 +1,6 @@
 import Board from "./Board";
 import "config/firebase"
-import { getDatabase, ref, set, onValue, update, remove, get, child } from "firebase/database";
+import { getDatabase, ref, set, onValue, update, remove, get, child, push } from "firebase/database";
 import { useEffect, useState } from "react"
 
 export default function Home() {
@@ -20,12 +20,15 @@ export default function Home() {
   function writeEmail() {
 
     update(ref(db, "users/"), {
-      email: ["asdf@gmail.com", "asdflkjasdf@asdf.com"]
+      email: ["john@gmail.com", "bob@gmail.com"]
     })
+    // const myRef = ref(db, "/users/email")
+    // const newEmail = push(myRef)
+    // set(newEmail, "red@gmail.com")
 
-    // push(ref(db, "users/"), {
-    //   email: ["asdf@asdfa.com"]
-    // })
+    push(ref(db, "users/email"), "red@gmail.com")
+
+
 
 
   }
@@ -39,9 +42,9 @@ export default function Home() {
     //   console.log(snapshot.val())
     // })
 
-    onValue(arrRef, snapshot => {
-      setArr([...snapshot.val()])
-    })
+    // onValue(arrRef, snapshot => {
+    //   setArr([...snapshot.val()])
+    // })
 
     onValue(userRef, (snapshot) => {
       setVal(snapshot.val())
