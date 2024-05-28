@@ -1,83 +1,82 @@
 import Board from "./Board";
-import "config/firebase"
-import { getDatabase, ref, set, onValue, update, remove, get, child, push } from "firebase/database";
+import { db } from "config/firebase"
+
+import { ref, child, push, onValue, get, DataSnapshot } from "firebase/database"
+
+import { useList } from "react-firebase-hooks/database"
+
 import { useEffect, useState } from "react"
 
 export default function Home() {
 
-  const [val, setVal] = useState<string>("")
-  const [arr, setArr] = useState<string[]>([])
+  //users
 
-  const db = getDatabase()
+  const usersRef = db.ref("users")
 
-  function writeData() {
-    set(ref(db, "users/"), {
-      username: "joemart06231990"
-    })
-  }
+  const [snapshot, error, loading] = useList(ref(db, "users"))
 
+  const updateUser = (pos: number) => {
 
-  function writeEmail() {
-
-    update(ref(db, "users/"), {
-      email: ["john@gmail.com", "bob@gmail.com"]
-    })
-    // const myRef = ref(db, "/users/email")
-    // const newEmail = push(myRef)
-    // set(newEmail, "red@gmail.com")
-
-    push(ref(db, "users/email"), "red@gmail.com")
-
-
-
+    const myArr = snapshot ? snapshot.map(x => x.val()) : []
+    myArr[pos] = "wow"
+    usersRef.set(myArr)
 
   }
 
-  const userRef = ref(db, "users/username")
-  const arrRef = ref(db, "users/email")
+  //board
+
+  //board reference
+  const boardRef = db.ref("board")
+
+  //destructure the row
+  const [row] = useList(ref(db, "board"))
+
+
+  const updateBoard = (pos: number) => {
+
+    //save the array on 'myCells'
+    const myCells = row ? row.map(x => x.val()) : []
+    //change from 'x' to 'o' or the other way
+    myCells[pos] = myCells[pos] == "x" ? "o" : "x";
+    //update on realtime Database
+    boardRef.set(myCells)
+
+  }
+
+  const potatoRef = db.ref("potato")
+  const [myPotato, setMyPotato] = useState("")
 
   useEffect(() => {
 
-    // get(child(ref(db), "users/email")).then(snapshot => {
-    //   console.log(snapshot.val())
-    // })
+    // get(potatoRef).then(res => setMyPotato(res.val()))
 
-    // onValue(arrRef, snapshot => {
-    //   setArr([...snapshot.val()])
-    // })
+    return onValue(ref(db, "potato"), snapshot => {
+      setMyPotato(snapshot.val())
 
-    onValue(userRef, (snapshot) => {
-      setVal(snapshot.val())
     })
 
-  }, [val])
+  }, [myPotato])
 
-  function myUpdate() {
-
-    const postData = {
-      username: "Joe"
-    }
-
-    update(ref(db, "users/"), { ...postData })
-
-  }
-
-  function myDelete() {
-    remove(ref(db, "users/username"))
+  const setPotato = () => {
+    const potato = myPotato == "hot" ? "cold" : "hot";
+    potatoRef.set(potato)
   }
 
   return (
     <>
       Connect 4
       <Board>
-        asdf
-        <button onClick={() => writeData()}>write in DB</button>
-        <button onClick={() => myUpdate()}>Update</button>
-        <button onClick={() => myDelete()}>Remove</button>
-        <button onClick={() => writeEmail()}>Write email</button>
-        <div>{val ? val : "processing..."}</div>
-        <div>{arr.map(x => x)}</div>
+        asf cvbnsdfgsfsf
+        {/* <div>
+          {snapshot ? snapshot.map((x, i) => <button onClick={() => updateUser(i)} key={i}>Click for {i}</button>) : ""}
+        </div>
 
+        {snapshot ? snapshot.map((x, i) => <div key={i}>{x.val()}</div>) : ""} */}
+
+        {/* Display the buttons and update a button depending on which one it is */}
+        {/* {row ? row.map((x, i) => <button onClick={() => updateBoard(i)} key={i}>{x.val()}</button>) : <></>} */}
+
+        <button onClick={setPotato}>Click here {myPotato}</button>
       </Board>
     </>
   );
