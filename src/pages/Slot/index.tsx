@@ -1,8 +1,8 @@
 import styles from "./index.module.scss"
 
-export default function Slot<T, G, H>({ ch, x, y }: { ch: T, x: G, y: H }) {
+export default function Slot<T extends string, F extends (line: number) => void, I extends number>({ ch, UpdateBoard, index }: { ch: T, UpdateBoard: F, index: I }) {
 
-    return <section className={styles["section"]}>
+    return <section onClick={() => UpdateBoard(index)} className={styles["section"]}>
 
         {ch ? "" : ""}
 
