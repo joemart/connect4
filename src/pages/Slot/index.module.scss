@@ -1,3 +1,16 @@
-section{
+@use "/src/styles/breakpoints.module";
+
+.section{
+
+    
+
+    @include breakpoints.phone{
+
+    }
+
+    @include breakpoints.tablet{
+
+    }
+
     
 }

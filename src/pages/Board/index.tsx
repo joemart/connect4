@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react"
 import Row from "../Row"
 import { BoardContext } from "../Context/BoardContext"
+import styles from "./index.module.scss"
+
 //Database
 import { db } from "config/firebase"
 import { ref, onValue, set } from "firebase/database"
@@ -47,7 +49,7 @@ export default function Board() {
 
 
 
-    return <section>
+    return <section className={styles["section"]}>
         <BoardContext.Provider value={UpdateBoard}>
             {board.map((row, i) => {
                 return <Row key={i} row={row} />

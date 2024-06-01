@@ -1,0 +1,27 @@
+$breakpoints : (
+    "xs" : 0,
+    "sm" : 480px,
+    "xl" : 1200px
+);
+
+@mixin phone{
+    @media (min-width: map-get($breakpoints, "xs")) and 
+    (max-width: map-get($breakpoints, "sm")) {
+        @content;
+    }
+};
+
+
+@mixin tablet{
+    @media (min-width: map-get($breakpoints, "sm")) and 
+    (max-width: map-get($breakpoints, "xl")) {
+        @content;
+    }
+};
+
+@mixin both {
+    @media (min-width: map-get($breakpoints, "xs")) and 
+    (max-width: map-get($breakpoints, "xl")) {
+        @content;
+    }
+}
