@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
-import Row from "../Row"
-import { BoardContext } from "../Context/BoardContext"
+import Row from "@/pages/components/Row"
+import { BoardContext } from "@/pages/components/Context/BoardContext"
 import styles from "./index.module.scss"
 
 //Database
