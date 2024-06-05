@@ -1,5 +1,11 @@
+@use "/src/styles/breakpoints.module";
+
 .section{
     width: 100%;
     height: 100%;
     display: flex;
+
+    @include breakpoints.phone{
+        flex-direction: column-reverse;
+    }
 }

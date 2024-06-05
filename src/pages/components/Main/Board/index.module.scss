@@ -1,13 +1,18 @@
 @use "/src/styles/breakpoints.module";
+@use "/src/styles/variables.module";
 
 .section{
     width: 100%;
     margin:10px;
 
-    background: radial-gradient(#4d49ff, #1411a3);
+    background: variables.$board_color;
     border-radius: 30px;
     
     display: flex;
     flex-direction: column;
     
+    @include breakpoints.phone{
+        margin:0;
+        scale: .95;
+    }
 }
