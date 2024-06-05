@@ -1,0 +1,11 @@
+.row{
+    height: 100%;
+
+    display:flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: row;
+    gap:clamp(0vw, 1vw, 26.5px);
+    margin:clamp(0vw , 3vw, 20px);
+
+}

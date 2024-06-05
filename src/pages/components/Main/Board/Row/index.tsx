@@ -1,6 +1,6 @@
-import Slot from "../Slot";
+import Slot from "./Slot";
 import styles from "./index.module.scss"
-import { BoardContext } from "../Context/BoardContext";
+import { BoardContext } from "../../../Context/BoardContext";
 import { useContext } from "react"
 
 export default function Row<T extends string[]>({ row }: { row: T }) {

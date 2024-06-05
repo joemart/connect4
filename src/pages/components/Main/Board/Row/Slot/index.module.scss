@@ -1,0 +1,23 @@
+@use "/src/styles/breakpoints.module";
+
+.section{
+
+    // flex: 0 0 100px;
+    border-radius: 50%;
+    background: hsl(0, 0%, 100%);
+
+    width: 100px;
+    height: 100px;
+    //make the scale change depending on width of screen from 0 to 1
+    scale: max(.5, 1);
+
+    @include breakpoints.phone{
+
+    }
+
+    @include breakpoints.tablet{
+
+    }
+
+    
+}

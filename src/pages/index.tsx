@@ -1,5 +1,4 @@
-import Board from "./components/Board";
-
+import Main from "./components/Main";
 
 export default function Home() {
 
@@ -8,8 +7,7 @@ export default function Home() {
     <>
 
       Connect 4
-      <Board>
-      </Board>
+      <Main></Main>
     </>
   );
 }

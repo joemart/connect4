@@ -1,0 +1,13 @@
+@use "/src/styles/breakpoints.module";
+
+.section{
+    width: 100%;
+    margin:10px;
+
+    background: radial-gradient(#4d49ff, #1411a3);
+    border-radius: 30px;
+    
+    display: flex;
+    flex-direction: column;
+    
+}

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import Row from "@/pages/components/Row"
+import Row from "@/pages/components/Main/Board/Row"
 import { BoardContext } from "@/pages/components/Context/BoardContext"
 import styles from "./index.module.scss"
 
