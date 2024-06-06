@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react"
+import styles from "./index.module.scss"
+
+//components
 import Row from "@/pages/components/Main/Board/Row"
 import { BoardContext } from "@/pages/components/Context/BoardContext"
-import styles from "./index.module.scss"
+import Controls from "./Controls"
 
 //Database
 import { db } from "config/firebase"
@@ -55,6 +58,6 @@ export default function Board() {
                 return <Row key={i} row={row} />
             })}
         </BoardContext.Provider>
-
+        <Controls></Controls>
     </section>
 }

@@ -1,0 +1,12 @@
+@use "@/styles/_variables.module.scss";
+
+.section{
+
+    padding: 20px;
+    background: variables.$drop_background;
+    box-shadow: variables.$drop_shadow;
+    border-radius: 10px;
+
+    
+
+}

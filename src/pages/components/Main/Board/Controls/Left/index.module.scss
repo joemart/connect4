@@ -1,0 +1,33 @@
+@use "/src/styles/_variables.module.scss";
+
+.section{
+
+    width: 100%;
+    height: 100%;
+
+    padding:10px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-radius: variables.$button_corner;
+    background: variables.$button_backgrond;
+
+
+    .container{
+
+        width: 100%;
+        height: 100%;
+    
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        border-radius: variables.$button_corner;
+        background: variables.$button_backgrond;
+
+        box-shadow: variables.$button_shadow;
+
+    }
+}
