@@ -10,6 +10,7 @@
     aspect-ratio: 1;
 
 
+
     @include breakpoints.phone{
         
     }
@@ -19,4 +20,12 @@
     }
 
     
+}
+
+.red{
+    background: hsl(0, 100%, 50%);
+}
+
+.yellow{
+    background: hsl(70, 100%, 50%);
 }

@@ -1,3 +1,3 @@
 export interface BoardType{
-    (line:number) : void
+    (line:number, player:string) : void
 }

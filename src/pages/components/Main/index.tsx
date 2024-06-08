@@ -1,11 +1,35 @@
 import styles from "./index.module.scss"
 import Board from "./Board"
 import Chat from "./Chat"
+import Reset from "@/utils/Reset"
+
+import { db } from "config/firebase"
+import { ref, set, push, update, query, orderByValue, orderByKey, orderByChild, get, limitToFirst } from "firebase/database"
 
 const Main = () => {
+
+    const NewUser = (user: string, address: string, age: number, height: number) => {
+        update(ref(db, "users"), { [user]: { address, age, height } })
+    }
+
+    const Child = async () => {
+
+        const children = query(ref(db, "users"), orderByChild("age"))
+        const val = (await get(children)).val()
+        console.log(val)
+
+    }
+
     return <section className={styles["section"]}>
+
+        {/* <button onClick={Child}>Child</button> */}
+
+        {/* <button onClick={() => NewUser("Lilly", "In a tree", 34, 159)}>New User</button> */}
+
+        <button onClick={Reset}>Reset</button>
         <Chat></Chat>
         <Board></Board>
+
     </section>
 }
 

@@ -33,7 +33,8 @@ export default function Board() {
 
     }, [])
 
-    const UpdateBoard: <T extends number>(line: T) => void = (line) => {
+    //player will be R or Y
+    const UpdateBoard: <T extends number, P extends string>(line: T, player: P) => void = (line, player) => {
 
         let tempBoard = board
 
@@ -44,7 +45,7 @@ export default function Board() {
         if (row !== board.length - 1) row -= 1
         if (tempBoard[row][line] !== "") row -= 1
 
-        tempBoard[row][line] = "X"
+        tempBoard[row][line] = player
 
         set(ref(db, "board"), tempBoard)
 

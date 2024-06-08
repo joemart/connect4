@@ -1,7 +1,7 @@
 import styles from "./index.module.scss"
 
 const Drop = () => {
-    return <section className={styles["section"]}>Drop button</section>
+    return <section className={styles["section"]}>Insert</section>
 }
 
 export default Drop
