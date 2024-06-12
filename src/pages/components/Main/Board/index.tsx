@@ -42,12 +42,13 @@ export default function Board() {
             return (row[line] !== "" || index === board.length - 1)
         })
 
-        if (row !== board.length - 1) row -= 1
-        if (tempBoard[row][line] !== "") row -= 1
+        if (row !== 0) {
+            if (tempBoard[row][line] !== "") row -= 1
+            tempBoard[row][line] = player
+            set(ref(db, "board"), tempBoard)
+        }
 
-        tempBoard[row][line] = player
 
-        set(ref(db, "board"), tempBoard)
 
     }
 
