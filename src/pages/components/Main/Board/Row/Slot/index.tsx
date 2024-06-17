@@ -4,5 +4,5 @@ export default function Slot<T extends string, F extends (line: number, player: 
 
     return <section onClick={() => UpdateBoard(index,
         "player" //authenticated player
-    )} className={`${styles["section"]} ${cell == "red" ? styles["red"] : cell == "yellow" ? styles["yellow"] : ""}`}></section>
+    )} className={`${styles["section"]} ${cell == "R" ? styles["red"] : cell == "Y" ? styles["yellow"] : ""}`}></section>
 }

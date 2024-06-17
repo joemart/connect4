@@ -48,8 +48,6 @@ export default function Board() {
             set(ref(db, "board"), tempBoard)
         }
 
-
-
     }
 
 
