@@ -29,8 +29,9 @@ export default function Board() {
 
     useEffect(() => {
 
-        onValue(ref(db, "board"), snapshot => setBoard(snapshot.val()))
+        const unsub = onValue(ref(db, "board"), snapshot => setBoard(snapshot.val()))
 
+        return unsub
     }, [])
 
     //player will be R or Y

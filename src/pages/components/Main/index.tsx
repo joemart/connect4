@@ -26,6 +26,7 @@ const Main = () => {
 
         {/* <button onClick={() => NewUser("Lilly", "In a tree", 34, 159)}>New User</button> */}
 
+        {/* Make a turn based game */}
         <button onClick={Reset}>Reset</button>
         <Chat></Chat>
         <Board></Board>
