@@ -1,5 +1,6 @@
 @use "/src/styles/variables.module";
 
-section{
+.section{
     background: variables.$layout_background;
+    height: 100%;
 }

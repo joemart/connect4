@@ -1,6 +1,7 @@
 import Main from "./components/Main";
+import Layout from "./components/layout";
 
-export default function Home() {
+const Home = () => {
 
 
   return (
@@ -11,3 +12,11 @@ export default function Home() {
     </>
   );
 }
+
+Home.getLayout = function (page: React.ReactElement) {
+  return <Layout>
+    {page}
+  </Layout>
+}
+
+export default Home

@@ -1,0 +1,46 @@
+.section{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    gap:20px;
+
+    background: white;
+    height: fit-content;
+    padding:20px;
+    border-radius: 10px;
+    border: 1px solid hsla(0, 0%, 0%, 0.5)
+}
+
+.divider{
+    width: 100%;
+    height: 1px;
+    background: hsl(0, 0%, 0%);
+}
+
+.inputCredentials{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+
+    gap:15px;
+    
+    text-transform: capitalize;
+    button{
+        width: 100%;
+    }
+}
+
+.Icon{
+    width: 38px;
+    height: 42px;
+}

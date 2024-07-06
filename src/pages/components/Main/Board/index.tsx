@@ -7,7 +7,7 @@ import { BoardContext } from "@/pages/components/Context/BoardContext"
 import Controls from "./Controls"
 
 //Database
-import { db } from "config/firebase"
+import { db } from "@firebase/firebase"
 import { ref, onValue, set } from "firebase/database"
 
 

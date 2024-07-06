@@ -3,7 +3,7 @@ import Board from "./Board"
 import Chat from "./Chat"
 import Reset from "@/utils/Reset"
 
-import { db } from "config/firebase"
+import { db } from "@firebase/firebase"
 import { ref, set, push, update, query, orderByValue, orderByKey, orderByChild, get, limitToFirst } from "firebase/database"
 
 const Main = () => {
