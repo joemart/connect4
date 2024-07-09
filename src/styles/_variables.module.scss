@@ -1,3 +1,9 @@
+//themes
+$dark_blue: #222BFF;
+$blue:#58C3FF;
+$light_blue:#B5E4FF;
+$red: #FF3E3E;
+
 //board
 $board_color: radial-gradient(#4d49ff, #1411a3);
 
@@ -7,8 +13,13 @@ $button_corner: 10px;
 $button_shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.25);
 
 //drop button
-$drop_background: #FF3E3E;
+$drop_background: $red;
 $drop_shadow: 0px 0px 5.9px 4px rgba(0, 0, 0, 0.75);
 
 //main background
-$layout_background: #B5E4FF;
+$layout_background: $light_blue;
+
+//register
+$border_background: hsla(0, 0%, 0%, 0.5);
+$container_background: white;
+$divider_background: hsl(0, 0%, 0%);

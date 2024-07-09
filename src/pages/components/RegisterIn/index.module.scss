@@ -1,3 +1,5 @@
+@use "_variables.module.scss";
+@use "_breakpoints.module.scss";
 .section{
     height: 100%;
     display: flex;
@@ -13,17 +15,27 @@
 
     gap:20px;
 
-    background: white;
+    background: variables.$container_background;
     height: fit-content;
-    padding:20px;
+    width: 500px;
+    
+    padding:50px;
     border-radius: 10px;
-    border: 1px solid hsla(0, 0%, 0%, 0.5)
+    border: 1px solid variables.$border_background;
+
+    @include breakpoints.phone(){
+        width: 95%;
+    }
+
+    h1{
+        font-size: 40px;
+    }
 }
 
 .divider{
     width: 100%;
     height: 1px;
-    background: hsl(0, 0%, 0%);
+    background: variables.$divider_background;
 }
 
 .inputCredentials{
@@ -32,15 +44,41 @@
     align-items: flex-start;
     flex-direction: column;
 
+    width: 100%;
     gap:15px;
     
     text-transform: capitalize;
     button{
         width: 100%;
+        padding:20px;
+        border-radius: 10px;
+
+        background: variables.$blue;
+    }
+
+    input{
+        width: 100%;
+        height: 72px;
+        border-radius: 10px;
+        background: variables.$border_background;
     }
 }
 
 .Icon{
     width: 38px;
     height: 42px;
+}
+
+.signUpWithGoogle,.signUpWithPhone {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    border: variables.$border_background;
+    border-radius: 10px;
+
+    width: 100%;
+    
+    cursor:pointer;
 }
