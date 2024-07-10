@@ -6,7 +6,14 @@ import Reset from "@/utils/Reset"
 import { db } from "@firebase/firebase"
 import { ref, set, push, update, query, orderByValue, orderByKey, orderByChild, get, limitToFirst } from "firebase/database"
 
+import { AuthContextProvider } from "@/pages/components/Context/AuthContext/AuthContext"
+import { AuthContext } from "@/pages/components/Context/AuthContext/AuthContext"
+import { useContext } from "react"
+
 const Main = () => {
+
+    //Resume from auth context
+    const Auth = useContext(AuthContext)
 
     const NewUser = (user: string, address: string, age: number, height: number) => {
         update(ref(db, "users"), { [user]: { address, age, height } })
@@ -35,3 +42,7 @@ const Main = () => {
 }
 
 export default Main
+
+Main.getLayout = <T extends { children: React.ReactNode }>({ children }: T) => {
+    return <AuthContextProvider>{children}</AuthContextProvider>
+}

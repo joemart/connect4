@@ -3,7 +3,7 @@ import styles from "./index.module.scss"
 
 //components
 import Row from "@/pages/components/Main/Board/Row"
-import { BoardContext } from "@/pages/components/Context/BoardContext"
+import { BoardContext } from "@/pages/components/Context/BoardContext/BoardContext"
 import Controls from "./Controls"
 
 //Database

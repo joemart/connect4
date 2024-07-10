@@ -2,10 +2,10 @@ import {NextResponse, type NextRequest} from "next/server"
 
 export function middleware(request:NextRequest){
 
-    const user = ""
+    // const user = ""
 
-    if(!user)
-        return Response.redirect(new URL("/", request.url))
+    // if(!user)
+    //     return Response.redirect(new URL("/", request.url))
     // if(!request.nextUrl.pathname.startsWith("/potato/aaa"))
     //     return Response.redirect(new URL("/potato/aaa"))
 
@@ -13,5 +13,5 @@ export function middleware(request:NextRequest){
 }
 
 export const config = {
-    matcher: ["/register"]
+    // matcher: ["/register"]
 }

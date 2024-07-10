@@ -1,3 +1,4 @@
+"use client";
 import { createContext } from "react";
 import { BoardType } from "./Board.types";
 

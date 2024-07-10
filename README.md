@@ -1,4 +1,4 @@
-I created connect 4 using NextJS and Firebase.
+I created connect 4 using NextJS and Firebase. A middleware was used to verify the user in each of the routes.
 
 References:
 
