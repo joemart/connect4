@@ -1,13 +1,20 @@
 import { useState } from "react"
 import Link from "next/link"
 import styles from "./index.module.scss"
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth"
+import { GoogleAuthProvider, signInWithPopup, setPersistence, signInWithRedirect } from "firebase/auth"
 import { auth } from "@firebase/firebase"
+import { db } from "@firebase/firebase"
+import { set, ref } from "firebase/database"
 
 import MyCustomLoader from "@/pages/components/imageLoader/CustomLoader"
-
+import { useRouter } from "next/router"
 
 export default function RegisterIn() {
+
+    const uid = "uid"
+    const userRef = ref(db, "users/")
+
+    const router = useRouter()
 
     const [values, setValues] = useState({
         email: "",
@@ -30,22 +37,22 @@ export default function RegisterIn() {
     }
 
     //issues with googleauthprovider
-    const handleGoogle = () => {
-        const provider = new GoogleAuthProvider()
+    const handleGoogle = async () => {
 
-        signInWithPopup(auth, provider)
-            .then((result) => {
-                const credential = GoogleAuthProvider.credentialFromResult(result)
+        try {
+            const provider = await new GoogleAuthProvider()
+            const credentials = await signInWithPopup(auth, provider)
 
-                if (credential) {
-                    const token = credential.accessToken
-                    const user = result.user
+            if (!localStorage.getItem(uid)) {
+                await set(userRef, { [credentials.user.uid]: { displayName: credentials.user.displayName, phoneNumber: credentials.user.phoneNumber, photo: credentials.user.photoURL, email: credentials.user.email } })
+                localStorage.setItem(uid, credentials.user.uid)
+            }
+            router.push("/")
+        } catch (e) {
+            console.log(e)
+        }
 
-                    console.log(credential)
-                }
-            }).catch((e) => {
-                // console.log(e)
-            })
+
     }
 
     const handlePhone = () => {
@@ -78,4 +85,8 @@ export default function RegisterIn() {
         </div>
 
     </section>
+}
+
+RegisterIn.layout = <T extends React.ReactNode>(page: T) => {
+    return { page }
 }

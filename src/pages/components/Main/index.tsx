@@ -3,35 +3,39 @@ import Board from "./Board"
 import Chat from "./Chat"
 import Reset from "@/utils/Reset"
 
+import { useContext, useEffect, useState } from "react"
+import { AuthContext } from "../Context/AuthContext/AuthContext"
 import { db } from "@firebase/firebase"
-import { ref, set, push, update, query, orderByValue, orderByKey, orderByChild, get, limitToFirst } from "firebase/database"
+import { get, ref, child } from "firebase/database"
 
-import { AuthContextProvider } from "@/pages/components/Context/AuthContext/AuthContext"
-import { AuthContext } from "@/pages/components/Context/AuthContext/AuthContext"
-import { useContext } from "react"
+import { User } from "./User.type"
 
 const Main = () => {
 
-    //Resume from auth context
+    const userRef = ref(db, "users/")
     const Auth = useContext(AuthContext)
+    const [user, setUser] = useState<User | null>(null)
+    const [flag, setFlag] = useState(true)
 
-    const NewUser = (user: string, address: string, age: number, height: number) => {
-        update(ref(db, "users"), { [user]: { address, age, height } })
-    }
+    useEffect(() => {
 
-    const Child = async () => {
+        const getAuth = async () => {
+            if (Auth && Auth.user)
+                get(child(userRef, Auth.user.uid)).then(snapshot => {
 
-        const children = query(ref(db, "users"), orderByChild("age"))
-        const val = (await get(children)).val()
-        console.log(val)
+                    setUser(snapshot.val())
+                    setFlag(false)
+                })
 
-    }
+        }
+        getAuth()
+
+    }, [flag])
 
     return <section className={styles["section"]}>
 
-        {/* <button onClick={Child}>Child</button> */}
 
-        {/* <button onClick={() => NewUser("Lilly", "In a tree", 34, 159)}>New User</button> */}
+        {user ? user.displayName : "No id"}
 
         {/* Make a turn based game */}
         <button onClick={Reset}>Reset</button>
@@ -43,6 +47,6 @@ const Main = () => {
 
 export default Main
 
-Main.getLayout = <T extends { children: React.ReactNode }>({ children }: T) => {
-    return <AuthContextProvider>{children}</AuthContextProvider>
+Main.getLayout = (page: React.ReactElement) => {
+    return <>{page}</>
 }

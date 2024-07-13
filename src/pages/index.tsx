@@ -1,6 +1,7 @@
 import Main from "./components/Main";
 import Layout from "./components/layout";
 
+
 const Home = () => {
 
 
@@ -13,10 +14,9 @@ const Home = () => {
   );
 }
 
-Home.getLayout = function (page: React.ReactElement) {
-  return <Layout>
-    {page}
-  </Layout>
+
+Home.getLayout = <T extends React.ReactNode>(page: T) => {
+  return <Layout>{page}</Layout>
 }
 
 export default Home
