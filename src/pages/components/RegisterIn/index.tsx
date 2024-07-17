@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import styles from "./index.module.scss"
 import { GoogleAuthProvider, signInWithPopup, setPersistence, signInWithRedirect } from "firebase/auth"
@@ -8,6 +8,8 @@ import { set, ref } from "firebase/database"
 
 import MyCustomLoader from "@/pages/components/imageLoader/CustomLoader"
 import { useRouter } from "next/router"
+import { useContext } from "react"
+import { AuthContext } from "../Context/AuthContext/AuthContext"
 
 export default function RegisterIn() {
 
@@ -20,6 +22,8 @@ export default function RegisterIn() {
         email: "",
         password: ""
     })
+
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setValues(v => { return { ...v, [e.target.name]: e.target.value } })
@@ -36,17 +40,30 @@ export default function RegisterIn() {
             .catch(e => console.log(e))
     }
 
+    const Auth = useContext(AuthContext)
+    useEffect(() => {
+        console.log(Auth)
+    }, [])
+
     //issues with googleauthprovider
     const handleGoogle = async () => {
 
         try {
-            const provider = await new GoogleAuthProvider()
-            const credentials = await signInWithPopup(auth, provider)
 
-            if (!localStorage.getItem(uid)) {
+
+            if (!Auth?.user) {
+
+                const provider = await new GoogleAuthProvider()
+                const credentials = await signInWithPopup(auth, provider)
                 await set(userRef, { [credentials.user.uid]: { displayName: credentials.user.displayName, phoneNumber: credentials.user.phoneNumber, photo: credentials.user.photoURL, email: credentials.user.email } })
-                localStorage.setItem(uid, credentials.user.uid)
+
             }
+
+            // if (!localStorage.getItem(uid)) {
+            // await set(userRef, { [credentials.user.uid]: { displayName: credentials.user.displayName, phoneNumber: credentials.user.phoneNumber, photo: credentials.user.photoURL, email: credentials.user.email } })
+            //     localStorage.setItem(uid, credentials.user.uid)
+            // }
+
             router.push("/")
         } catch (e) {
             console.log(e)

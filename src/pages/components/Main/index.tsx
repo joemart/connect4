@@ -41,6 +41,7 @@ const Main = () => {
         <button onClick={Reset}>Reset</button>
         <Chat></Chat>
         <Board></Board>
+        {Auth ? <button onClick={Auth.logOut}>Sign out</button> : <></>}
 
     </section>
 }

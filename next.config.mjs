@@ -19,7 +19,8 @@ const nextConfig = {
   },
   sassOptions:{
     includePaths: [path.join(__dirname,"src/styles")]
-  }
+  },
+  // skipMiddlewareUrlNormalize:true
 };
 
 export default nextConfig;

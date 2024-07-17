@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { auth } from "@firebase/firebase"
 import { AuthType } from "./Auth.types";
 import { type User, signOut, onAuthStateChanged, PhoneAuthProvider, signInWithEmailAndPassword } from "firebase/auth";
+import { useRouter } from "next/router";
 
 export const AuthContext = createContext<AuthType | undefined>(undefined)
 
@@ -10,10 +11,11 @@ export const AuthContextProvider = <T extends { children: React.ReactNode }>({ c
 
     const [user, setUser] = useState<User | null>(null)
     const [loading, setLoading] = useState(true)
-    const [loggedIn, setLoggedIn] = useState(false)
+    const router = useRouter()
 
     const logOut = () => {
         signOut(auth)
+        router.reload()
     }
 
     useEffect(() => {

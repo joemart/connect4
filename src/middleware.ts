@@ -1,17 +1,12 @@
-import {NextResponse, type NextRequest} from "next/server"
+import {NextResponse} from "next/server"
+import type { NextRequest } from "next/server"
 
 export function middleware(request:NextRequest){
-
-    // const user = ""
-
-    // if(!user)
-    //     return Response.redirect(new URL("/", request.url))
-    // if(!request.nextUrl.pathname.startsWith("/potato/aaa"))
-    //     return Response.redirect(new URL("/potato/aaa"))
-
+    //do something
+    console.log(request.nextUrl.pathname)
     return NextResponse.next()
 }
 
 export const config = {
-    // matcher: ["/register"]
+    matcher: ["/((?!api|_next/static|_next/image|favicon.ico|.*\.svg|register).*)"]
 }
