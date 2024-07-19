@@ -10,7 +10,7 @@ import { get, ref, child } from "firebase/database"
 
 import { User } from "./User.type"
 
-const Main = () => {
+const Game = () => {
 
     const userRef = ref(db, "users/")
     const Auth = useContext(AuthContext)
@@ -38,16 +38,15 @@ const Main = () => {
         {user ? user.displayName : "No id"}
 
         {/* Make a turn based game */}
-        <button onClick={Reset}>Reset</button>
+        <button onClick={Reset}>Reset DB</button>
         <Chat></Chat>
         <Board></Board>
-        {Auth ? <button onClick={Auth.logOut}>Sign out</button> : <></>}
 
     </section>
 }
 
-export default Main
+export default Game
 
-Main.getLayout = (page: React.ReactElement) => {
+Game.getLayout = (page: React.ReactElement) => {
     return <>{page}</>
 }

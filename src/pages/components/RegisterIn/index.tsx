@@ -13,15 +13,14 @@ import { AuthContext } from "../Context/AuthContext/AuthContext"
 
 export default function RegisterIn() {
 
-    const uid = "uid"
+
     const userRef = ref(db, "users/")
-
     const router = useRouter()
-
     const [values, setValues] = useState({
         email: "",
         password: ""
     })
+    const reRoute = "/menu"
 
 
 
@@ -41,35 +40,19 @@ export default function RegisterIn() {
     }
 
     const Auth = useContext(AuthContext)
-    useEffect(() => {
-        console.log(Auth)
-    }, [])
 
     //issues with googleauthprovider
     const handleGoogle = async () => {
-
         try {
-
-
             if (!Auth?.user) {
-
                 const provider = await new GoogleAuthProvider()
                 const credentials = await signInWithPopup(auth, provider)
                 await set(userRef, { [credentials.user.uid]: { displayName: credentials.user.displayName, phoneNumber: credentials.user.phoneNumber, photo: credentials.user.photoURL, email: credentials.user.email } })
-
             }
-
-            // if (!localStorage.getItem(uid)) {
-            // await set(userRef, { [credentials.user.uid]: { displayName: credentials.user.displayName, phoneNumber: credentials.user.phoneNumber, photo: credentials.user.photoURL, email: credentials.user.email } })
-            //     localStorage.setItem(uid, credentials.user.uid)
-            // }
-
-            router.push("/")
+            router.push(reRoute)
         } catch (e) {
             console.log(e)
         }
-
-
     }
 
     const handlePhone = () => {
@@ -105,5 +88,5 @@ export default function RegisterIn() {
 }
 
 RegisterIn.layout = <T extends React.ReactNode>(page: T) => {
-    return { page }
+    return page
 }

@@ -1,9 +1,14 @@
 @use "/src/styles/breakpoints.module";
 @use "/src/styles/variables.module";
 
-.section{
+.wrapper{
+    padding:10px;
     width: 100%;
-    margin:10px;
+}
+
+.board{
+    width: 100%;
+    height: 100%;
 
     background: variables.$board_color;
     border-radius: 30px;

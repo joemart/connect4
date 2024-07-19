@@ -1,0 +1,37 @@
+
+.section_wrapper{
+    width: 100%;
+    padding:10px;
+}
+
+.section{
+
+    width: 100%;
+
+    /* Auto layout */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    gap: 10px;
+
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    filter: drop-shadow(0px 4px 4px #000000);
+    border-radius: 10px;
+
+    button{
+        background: none;
+        border:none;
+
+        cursor: pointer;
+    }
+
+    .signed{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+}

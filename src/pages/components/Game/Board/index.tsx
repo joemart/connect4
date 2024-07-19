@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import styles from "./index.module.scss"
 
 //components
-import Row from "@/pages/components/Main/Board/Row"
+import Row from "@/pages/components/Game/Board/Row"
 import { BoardContext } from "@/pages/components/Context/BoardContext/BoardContext"
 import Controls from "./Controls"
 
@@ -53,12 +53,14 @@ export default function Board() {
 
 
 
-    return <section className={styles["section"]}>
-        <BoardContext.Provider value={UpdateBoard}>
-            {board.map((row, i) => {
-                return <Row key={i} row={row} />
-            })}
-        </BoardContext.Provider>
-        <Controls></Controls>
-    </section>
+    return <section className={styles["wrapper"]}>
+        <div className={styles["board"]}>
+            <BoardContext.Provider value={UpdateBoard}>
+                {board.map((row, i) => {
+                    return <Row key={i} row={row} />
+                })}
+            </BoardContext.Provider>
+            <Controls></Controls>
+        </div></section>
+
 }

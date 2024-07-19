@@ -1,8 +1,8 @@
 import styles from "./index.module.scss"
 
-import Left from "../Controls/Left"
-import Right from "../Controls/Right"
-import Drop from "../Controls/Drop"
+import Left from "./Left"
+import Right from "./Right"
+import Drop from "./Drop"
 
 const Controls = () => {
 

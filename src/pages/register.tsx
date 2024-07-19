@@ -7,7 +7,6 @@ export default function LoginRegister() {
 }
 
 LoginRegister.getLayout = function (page: React.ReactElement) {
-    return <Layout>
-        {page}
-    </Layout>
+    return <Layout>{page}</Layout>
+
 }
