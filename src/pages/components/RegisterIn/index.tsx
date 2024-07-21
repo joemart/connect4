@@ -20,7 +20,7 @@ export default function RegisterIn() {
         email: "",
         password: ""
     })
-    const reRoute = "/menu"
+    const reRoute = "/"
 
 
 
@@ -49,10 +49,12 @@ export default function RegisterIn() {
                 const credentials = await signInWithPopup(auth, provider)
                 await set(userRef, { [credentials.user.uid]: { displayName: credentials.user.displayName, phoneNumber: credentials.user.phoneNumber, photo: credentials.user.photoURL, email: credentials.user.email } })
             }
-            router.push(reRoute)
+
         } catch (e) {
             console.log(e)
+
         }
+        router.push(reRoute)
     }
 
     const handlePhone = () => {

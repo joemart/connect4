@@ -3,6 +3,7 @@ import type { NextRequest } from "next/server"
 
 export function middleware(request:NextRequest){
     //do something
+    //Can't check AuthContext
 
     return NextResponse.next()
 }

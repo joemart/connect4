@@ -1,0 +1,61 @@
+@use "@/styles/_breakpoints.module.scss";
+@use "@/styles/_variables.module.scss";
+
+.section{
+    //remove when finished debugging
+    outline:1px solid hsla(0, 0%, 0%, 0.2);
+    
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-direction: column;
+
+
+    position: fixed;
+    height: 100%;
+    width: 400px;
+    background: variables.$light_blue;
+
+    padding: 50px;
+    z-index: 2;
+    top:0;
+    right: 0;
+    
+    
+}
+
+.profile{
+    $transition_details : .2s all ease-in-out;
+    translate:0px;
+    transition: $transition_details ;
+    &_hide{
+        transition: $transition_details ;
+        translate: 400px;
+    }
+}
+
+.edit_profile{
+    display: flex;
+
+    div{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+}
+
+.image{
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+}
+
+.close{
+    align-self: flex-end;
+    cursor: pointer;
+}
+
+.personal_details, .game_details{
+    display: flex;
+    flex-direction: column;
+}

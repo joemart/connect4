@@ -15,7 +15,7 @@ export const AuthContextProvider = <T extends { children: React.ReactNode }>({ c
 
     const logOut = () => {
         signOut(auth)
-        router.reload()
+        router.push("/")
     }
 
     useEffect(() => {

@@ -2,16 +2,26 @@ import Game from "./components/Game";
 import Layout from "./components/layout";
 import { useRouter } from "next/router";
 import styles from "./index.module.scss"
-
+import { useEffect, useContext } from "react";
+import { AuthContext } from "./components/Context/AuthContext/AuthContext";
 
 const Home = () => {
 
   const router = useRouter()
+  const Auth = useContext(AuthContext)
+
+  useEffect(() => {
+    const isSigned = () => {
+      if (Auth?.user)
+        router.push("/menu")
+    }
+    return isSigned
+  }, [])
 
   return (
     <section className={styles["section"]}>
       <div className={styles["title"]}>Connect 4</div>
-      <button className={styles["register_button"]} onClick={() => router.push("/register")}>Create account</button>
+      <button className={styles["register_button"]} onClick={() => router.push("/register")}>Sign in</button>
     </section>
   );
 }

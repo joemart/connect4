@@ -27,13 +27,10 @@ const Chat = () => {
 
     const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 
-        console.log(chat)
         e.preventDefault()
-
-        if (Auth)
+        if (Auth && message !== "")
             push(chatRef, { user: Auth?.user?.displayName, message })
         setMessage("")
-        console.log("Submitted!")
     }
 
     return <section className={styles["section"]}>
@@ -55,7 +52,7 @@ const Chat = () => {
             </form>
 
         </div>
-        <div className={styles["surrender"]}>Surrender</div>
+        {/* <div className={styles["surrender"]}>Surrender</div> */}
 
     </section>
 }
