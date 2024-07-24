@@ -47,7 +47,7 @@ export default function RegisterIn() {
             if (!Auth?.user) {
                 const provider = await new GoogleAuthProvider()
                 const credentials = await signInWithPopup(auth, provider)
-                await set(userRef, { [credentials.user.uid]: { displayName: credentials.user.displayName, phoneNumber: credentials.user.phoneNumber, photo: credentials.user.photoURL, email: credentials.user.email } })
+                await set(userRef, { [credentials.user.uid]: { displayName: credentials.user.displayName, photo: credentials.user.photoURL, email: credentials.user.email } })
             }
 
         } catch (e) {
