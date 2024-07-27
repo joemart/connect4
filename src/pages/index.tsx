@@ -11,6 +11,7 @@ const Home = () => {
   const Auth = useContext(AuthContext)
 
   useEffect(() => {
+
     const isSigned = () => {
       if (Auth?.user)
         router.push("/menu")

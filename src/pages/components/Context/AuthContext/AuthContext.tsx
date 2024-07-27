@@ -11,28 +11,25 @@ export const AuthContext = createContext<AuthType | undefined>(undefined)
 export const AuthContextProvider = <T extends { children: React.ReactNode }>({ children }: T): React.ReactNode => {
 
     const [user, setUser] = useState<ProfUser | null>(null)
-    const [loading, setLoading] = useState(true)
     const router = useRouter()
 
-    const logOut = () => {
-        signOut(auth)
+    const logOut = async () => {
+        await signOut(auth)
         router.push("/")
     }
 
     useEffect(() => {
 
-        const unsub = onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                setUser({ displayName: user.displayName as string, email: user.email as string, photo: user.photoURL as string, uid: user.uid })
-                setLoading(false)
-            }
+        return onAuthStateChanged(auth, async (u) => {
+            if (u) {
+                setUser({ displayName: u.displayName as string, email: u.email as string, photo: u.photoURL as string, uid: u.uid })
+
+            } else setUser(null)
         })
 
-        return unsub
-    }, [user])
+    }, [])
 
-    if (loading) return <>Loading...</>
-    else return <AuthContext.Provider value={{ user, logOut }}>{children}</AuthContext.Provider>
+    return <AuthContext.Provider value={{ user, logOut }}>{children}</AuthContext.Provider>
 
 }
 
