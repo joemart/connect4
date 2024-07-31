@@ -4,7 +4,6 @@ import Chat from "@/pages/components/Menu/chat"
 import Options from "@/pages/components/Menu/options"
 
 const Menu = () => {
-
     return <section className={styles["section"]}>
         <Chat></Chat>
         <Options></Options>

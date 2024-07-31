@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import Link from "next/link"
 import styles from "./index.module.scss"
-import { GoogleAuthProvider, signInWithPopup, setPersistence, signInWithRedirect } from "firebase/auth"
+import { GoogleAuthProvider, signInWithPopup, signInWithRedirect } from "firebase/auth"
 import { auth } from "@firebase/firebase"
 import { db } from "@firebase/firebase"
-import { set, ref } from "firebase/database"
+import { set, ref, onDisconnect } from "firebase/database"
 
 import MyCustomLoader from "@/pages/components/imageLoader/CustomLoader"
 import { useRouter } from "next/router"

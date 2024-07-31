@@ -12,11 +12,11 @@ const Home = () => {
 
   useEffect(() => {
 
-    const isSigned = () => {
+    return () => {
       if (Auth?.user)
         router.push("/menu")
     }
-    return isSigned
+
   }, [])
 
   return (
