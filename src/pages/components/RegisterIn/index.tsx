@@ -14,7 +14,7 @@ import { AuthContext } from "../Context/AuthContext/AuthContext"
 export default function RegisterIn() {
 
 
-    const userRef = ref(db, "users/")
+
     const router = useRouter()
     const [values, setValues] = useState({
         email: "",
@@ -47,7 +47,8 @@ export default function RegisterIn() {
             if (!Auth?.user) {
                 const provider = await new GoogleAuthProvider()
                 const credentials = await signInWithPopup(auth, provider)
-                await set(userRef, { [credentials.user.uid]: { displayName: credentials.user.displayName, photo: credentials.user.photoURL, email: credentials.user.email } })
+                // const userRef = ref(db, "users/" + credentials.user.uid)
+                // await set(userRef, { displayName: credentials.user.displayName, photo: credentials.user.photoURL, email: credentials.user.email })
             }
 
         } catch (e) {

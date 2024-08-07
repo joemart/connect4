@@ -7,3 +7,4 @@ References:
 3. [SCSSLoader for path](https://github.com/Shopify/slate/issues/785)
 4. [SCSS how to use include paths](https://github.com/vercel/next.js/discussions/12771)
 5. [AuthContextProvider](https://github.com/sairajchouhan/nextjs-firebase-auth/blob/main/context/AuthContext.tsx)
+6. [useContext + useEffect confusion](https://levelup.gitconnected.com/react-context-sync-vs-async-8d67562d4b4a)

@@ -5,12 +5,15 @@ import { useContext, useEffect, useState } from "react"
 import { onValue, push } from "firebase/database"
 import { db } from "@firebase/firebase"
 import { ref } from "firebase/database"
-import { AuthContext } from "../Context/AuthContext/AuthContext"
+import { AuthContext } from "@/pages/components/Context/AuthContext/AuthContext"
+import { Board } from "./Board.type"
 
-const chatRef = ref(db, "/chat")
-const usersRef = ref(db, "/users")
 
-const Chat = () => {
+
+const Chat = <T extends { id: string | string[] | undefined }>({ id }: T) => {
+    const chatRef = ref(db, "/boards/" + id + "/chat")
+    const usersRef = ref(db, "/boards/" + id + "/users")
+    const boardRef = ref(db, "/boards/" + id)
 
     const [message, setMessage] = useState("")
     const [chat, setChat] = useState<{ id: { user: string, message: string } }>()
@@ -23,9 +26,12 @@ const Chat = () => {
         return onValue(chatRef, snapshot => setChat(snapshot.val()))
     }, [])
 
+    //onlineusers reverts to 0 on page refresh
     useEffect(() => {
-        return onValue(usersRef, snapshot => setOnlineUsers(snapshot.size))
-    }, [])
+
+        // return onValue(boardRef, (snapshot:{val:()=>Board}) => setOnlineUsers((snapshot.val().player1 ? 1 : 0) + (snapshot.val().player2 ? 1 : 0) + snapshot.val().spectators.length))
+        return onValue(boardRef, (snapshot: { val: () => Board }) => setOnlineUsers((snapshot.val().player1 ? 1 : 0) + (snapshot.val().player2 ? 1 : 0) + (snapshot.val().spectators?.length ?? 0)))
+    }, [onlineUsers])
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setMessage(e.target.value)
