@@ -5,11 +5,12 @@ import { onValue, ref } from "firebase/database"
 import { db } from "@firebase/firebase"
 
 import Chat from "./chat"
+import Board from "@/pages/components/Game/Board"
 
 import styles from "./index.module.scss"
 
 
-export default function Board() {
+export default function BoardID() {
 
     const router = useRouter()
 
@@ -22,7 +23,7 @@ export default function Board() {
                 else {
                     //do something with the existing board info
                     //update DB here?
-                    console.log(snapshot.val())
+                    // console.log(snapshot.val())
                 }
             })
         }
@@ -30,5 +31,6 @@ export default function Board() {
 
     return <section className={styles["section"]}>
         <Chat id={router.isReady ? router.query.boardID : ""} />
+        <Board />
     </section>
 }

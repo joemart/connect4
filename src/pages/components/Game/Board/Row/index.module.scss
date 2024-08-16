@@ -1,5 +1,13 @@
+@use "/src/styles/breakpoints.module";
+
 .slot_wrapper{
-    padding:clamp(0vw , 3vw, 15px);
+
+    padding:15px;
+    
+    @include breakpoints.both{
+        padding: 5px;
+    }
+    
 }
 .row{
     height: 100%;

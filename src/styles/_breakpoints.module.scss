@@ -1,6 +1,7 @@
 $breakpoints : (
     "xs" : 0,
     "sm" : 480px,
+    "md" : 900px,
     "xl" : 1200px
 );
 
@@ -11,6 +12,12 @@ $breakpoints : (
     }
 };
 
+@mixin medium{
+    @media (min-width: map-get($breakpoints, "sm")) and 
+    (max-width: map-get($breakpoints, "md")) {
+        @content;
+    }
+}
 
 @mixin tablet{
     @media (min-width: map-get($breakpoints, "sm")) and 

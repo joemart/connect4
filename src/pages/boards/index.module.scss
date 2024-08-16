@@ -1,3 +1,16 @@
+@use "/src/styles/breakpoints.module";
 .section{
     height: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    @include breakpoints.phone{
+        flex-direction: column-reverse;
+    }
+    @include breakpoints.medium{
+        flex-direction: column-reverse;
+    }
+
 }

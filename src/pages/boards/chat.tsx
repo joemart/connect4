@@ -12,7 +12,7 @@ import { Board } from "./Board.type"
 
 const Chat = <T extends { id: string | string[] | undefined }>({ id }: T) => {
     const chatRef = ref(db, "/boards/" + id + "/chat")
-    const usersRef = ref(db, "/boards/" + id + "/users")
+    // const usersRef = ref(db, "/boards/" + id + "/users")
     const boardRef = ref(db, "/boards/" + id)
 
     const [message, setMessage] = useState("")
@@ -22,16 +22,18 @@ const Chat = <T extends { id: string | string[] | undefined }>({ id }: T) => {
     const [onlineUsers, setOnlineUsers] = useState<number>(0)
 
     useEffect(() => {
+        return onValue(chatRef, snapshot => {
+            setChat(snapshot.val())
+        })
+    }, [id])
 
-        return onValue(chatRef, snapshot => setChat(snapshot.val()))
-    }, [])
 
-    //onlineusers reverts to 0 on page refresh
     useEffect(() => {
-
-        // return onValue(boardRef, (snapshot:{val:()=>Board}) => setOnlineUsers((snapshot.val().player1 ? 1 : 0) + (snapshot.val().player2 ? 1 : 0) + snapshot.val().spectators.length))
-        return onValue(boardRef, (snapshot: { val: () => Board }) => setOnlineUsers((snapshot.val().player1 ? 1 : 0) + (snapshot.val().player2 ? 1 : 0) + (snapshot.val().spectators?.length ?? 0)))
-    }, [onlineUsers])
+        return onValue(boardRef, (snapshot: { val: () => Board }) => {
+            // console.log((snapshot.val().player1 ? 1 : 0) + (snapshot.val().player2 ? 1 : 0) + (snapshot.val().spectators?.length ?? 0))
+            setOnlineUsers((snapshot.val().player1 ? 1 : 0) + (snapshot.val().player2 ? 1 : 0) + (snapshot.val().spectators?.length ?? 0))
+        })
+    }, [onlineUsers, id])
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setMessage(e.target.value)

@@ -6,7 +6,7 @@
     border-radius: 50%;
     background: hsl(0, 0%, 100%);
 
-    width: 100px;
+    width: clamp(48px, 7vw, 100px);
     aspect-ratio: 1;
 
 
