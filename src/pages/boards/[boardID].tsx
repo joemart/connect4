@@ -9,6 +9,8 @@ import Board from "@/pages/components/Game/Board"
 
 import styles from "./index.module.scss"
 
+import { BoardIDContext, BoardIDContextProvider } from "../components/Context/BoardIDContext/BoardIDContext"
+
 
 export default function BoardID() {
 
@@ -30,7 +32,10 @@ export default function BoardID() {
     }, [router.isReady])
 
     return <section className={styles["section"]}>
-        <Chat id={router.isReady ? router.query.boardID : ""} />
-        <Board />
+        <BoardIDContextProvider id={router.isReady ? router.query.boardID : ""}>
+            <Chat />
+            <Board />
+        </BoardIDContextProvider>
+
     </section>
 }

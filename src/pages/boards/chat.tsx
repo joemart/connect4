@@ -7,25 +7,31 @@ import { db } from "@firebase/firebase"
 import { ref } from "firebase/database"
 import { AuthContext } from "@/pages/components/Context/AuthContext/AuthContext"
 import { Board } from "./Board.type"
+import { BoardIDContext } from "../components/Context/BoardIDContext/BoardIDContext"
 
 
 
-const Chat = <T extends { id: string | string[] | undefined }>({ id }: T) => {
-    const chatRef = ref(db, "/boards/" + id + "/chat")
-    // const usersRef = ref(db, "/boards/" + id + "/users")
-    const boardRef = ref(db, "/boards/" + id)
+const Chat = () => {
+
+    const Auth = useContext(AuthContext)
+    const BoardID = useContext(BoardIDContext)?.id
+
+    const chatRef = ref(db, "/boards/" + BoardID + "/chat")
+    // const usersRef = ref(db, "/boards/" + BoardID + "/users")
+    const boardRef = ref(db, "/boards/" + BoardID)
 
     const [message, setMessage] = useState("")
     const [chat, setChat] = useState<{ id: { user: string, message: string } }>()
-
-    const Auth = useContext(AuthContext)
     const [onlineUsers, setOnlineUsers] = useState<number>(0)
 
+
+
     useEffect(() => {
+
         return onValue(chatRef, snapshot => {
             setChat(snapshot.val())
         })
-    }, [id])
+    }, [BoardID])
 
 
     useEffect(() => {
@@ -33,7 +39,7 @@ const Chat = <T extends { id: string | string[] | undefined }>({ id }: T) => {
             // console.log((snapshot.val().player1 ? 1 : 0) + (snapshot.val().player2 ? 1 : 0) + (snapshot.val().spectators?.length ?? 0))
             setOnlineUsers((snapshot.val().player1 ? 1 : 0) + (snapshot.val().player2 ? 1 : 0) + (snapshot.val().spectators?.length ?? 0))
         })
-    }, [onlineUsers, id])
+    }, [onlineUsers, BoardID])
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setMessage(e.target.value)
