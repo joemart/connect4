@@ -8,3 +8,4 @@ References:
 4. [SCSS how to use include paths](https://github.com/vercel/next.js/discussions/12771)
 5. [AuthContextProvider](https://github.com/sairajchouhan/nextjs-firebase-auth/blob/main/context/AuthContext.tsx)
 6. [useContext + useEffect confusion](https://levelup.gitconnected.com/react-context-sync-vs-async-8d67562d4b4a)
+7. [Factory functions for DBClass.ts](https://heyjoshlee.medium.com/factory-functions-in-javascript-the-how-and-why-d8988bda654a)

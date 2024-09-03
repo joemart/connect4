@@ -1,3 +1,4 @@
 export interface BoardType{
-    (line:number, player:string) : void
+    UpdateBoard:(line:number, player:string, board: string[][] | undefined) => void,
+    board: string[][]
 }

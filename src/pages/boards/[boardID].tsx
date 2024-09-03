@@ -11,13 +11,13 @@ import styles from "./index.module.scss"
 
 import { BoardIDContext, BoardIDContextProvider } from "../components/Context/BoardIDContext/BoardIDContext"
 
-
 export default function BoardID() {
 
     const router = useRouter()
 
     //check if the boardID exists
     useEffect(() => {
+
         if (router.isReady) {
             const boardRef = ref(db, "/boards/" + router.query.boardID)
             return onValue(boardRef, async snapshot => {

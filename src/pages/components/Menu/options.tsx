@@ -4,6 +4,7 @@ import { push, ref } from "firebase/database"
 import { useRouter } from "next/router"
 import { useContext } from "react"
 import { AuthContext } from "../Context/AuthContext/AuthContext"
+import { createBoardID } from "@/utils/DBClass"
 
 const Options = () => {
     const router = useRouter()
@@ -11,7 +12,7 @@ const Options = () => {
     const createLobby = () => {
 
         const uid = Auth?.user?.uid
-        const boardID = push(ref(db, "/boards"), { player1: uid }).key
+        const boardID = createBoardID(uid)
         router.push("/boards/" + boardID)
 
     }

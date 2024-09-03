@@ -35,10 +35,10 @@ export default function Board() {
     }, [])
 
     //player will be R or Y
-    const UpdateBoard: <T extends number, P extends string>(line: T, player: P) => void = (line, player) => {
+    const UpdateBoard: <F extends number, G extends string, H extends string[][] | undefined>(line: F, player: G, board: H) => void = (line, player, board) => {
 
         let tempBoard = board
-
+        if (!tempBoard || !board) return
         let row = tempBoard.findIndex((row, index) => {
             return (row[line] !== "" || index === board.length - 1)
         })
@@ -55,7 +55,7 @@ export default function Board() {
 
     return <section className={styles["wrapper"]}>
         <div className={styles["board"]}>
-            <BoardContext.Provider value={UpdateBoard}>
+            <BoardContext.Provider value={{ UpdateBoard, board }}>
                 {board.map((row, i) => {
                     return <Row key={i} row={row} />
                 })}
