@@ -5,14 +5,13 @@ import Reset from "@/utils/Reset"
 
 import { useContext, useEffect, useState } from "react"
 import { AuthContext } from "../Context/AuthContext/AuthContext"
-import { db } from "@firebase/firebase"
-import { get, ref, child } from "firebase/database"
+
+import { getUserRef } from "@/utils/DBClass"
 
 import { User } from "./User.type"
 
 const Game = () => {
 
-    const userRef = ref(db, "users/")
     const Auth = useContext(AuthContext)
     const [user, setUser] = useState<User | null>(null)
     const [flag, setFlag] = useState(true)
@@ -21,7 +20,7 @@ const Game = () => {
 
         const getAuth = async () => {
             if (Auth && Auth.user)
-                get(child(userRef, Auth.user.uid)).then(snapshot => {
+                getUserRef(Auth.user.uid).then(snapshot => {
 
                     setUser(snapshot.val())
                     setFlag(false)

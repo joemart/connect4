@@ -1,12 +1,10 @@
 import { createContext, useEffect, useState } from "react";
 
-import { auth, db } from "@firebase/firebase"
 import { AuthType } from "./Auth.types";
-import { type User, signOut, onAuthStateChanged, PhoneAuthProvider, signInWithEmailAndPassword } from "firebase/auth";
 import { useRouter } from "next/router";
 import { type User as ProfUser } from "../../Profile/User.type";
 import { DatabaseReference, onDisconnect, ref, set } from "firebase/database";
-
+import { AuthUtil, RefUtil } from "@/utils/DBClass";
 
 export const AuthContext = createContext<AuthType | undefined>(undefined)
 
@@ -19,10 +17,10 @@ export const AuthContextProvider = <T extends { children: React.ReactNode }>({ c
 
     let userRef: DatabaseReference
 
-    userRef = ref(db, "/users/" + user?.uid)
+    userRef = RefUtil.userIDRef(user)
     const logOut = async () => {
 
-        signOut(auth).then(() => {
+        AuthUtil.utilSignOut().then(() => {
             if (user) {
                 set(userRef, {})
             }
@@ -31,7 +29,7 @@ export const AuthContextProvider = <T extends { children: React.ReactNode }>({ c
     }
 
     useEffect(() => {
-        return onAuthStateChanged(auth, async (u) => {
+        return AuthUtil.utilOnAuthStateChanged(async (u) => {
             // console.log(u)
             if (u) {
                 // onDisconnect(ref(db, "/users/" + u.uid)).remove()

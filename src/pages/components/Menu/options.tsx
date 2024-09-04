@@ -1,6 +1,4 @@
 import styles from "./options.module.scss"
-import { db } from "@firebase/firebase"
-import { push, ref } from "firebase/database"
 import { useRouter } from "next/router"
 import { useContext } from "react"
 import { AuthContext } from "../Context/AuthContext/AuthContext"
