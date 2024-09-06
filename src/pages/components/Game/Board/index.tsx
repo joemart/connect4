@@ -3,15 +3,25 @@ import styles from "./index.module.scss"
 
 //components
 import Row from "@/pages/components/Game/Board/Row"
-import { BoardContext } from "@/pages/components/Context/BoardContext/BoardContext"
+import { BoardIDContext } from "../../Context/BoardIDContext/BoardIDContext"
+import { BoardContext } from "../../Context/BoardContext/BoardContext"
 import Controls from "./Controls"
 
 //Database
 import { db } from "@firebase/firebase"
 import { ref, onValue, set } from "firebase/database"
 
+import { OnValueDB, SetDB } from "@/utils/DBClass"
+
+import { useContext } from "react"
 
 export default function Board() {
+
+    // const BoardID = useContext(BoardIDContext)?.id
+    const Board = useContext(BoardIDContext)
+    let BoardID: string[] | string | undefined
+    if (Board)
+        BoardID = Board.id
 
     const [board, setBoard] = useState([
         ['', '', '', '', '', '', ''],
@@ -29,10 +39,9 @@ export default function Board() {
 
     useEffect(() => {
 
-        const unsub = onValue(ref(db, "board"), snapshot => setBoard(snapshot.val()))
+        return OnValueDB.boardIDMovesOnValue(BoardID, snapshot => setBoard(snapshot.val()))
 
-        return unsub
-    }, [])
+    }, [BoardID])
 
     //player will be R or Y
     const UpdateBoard: <F extends number, G extends string, H extends string[][] | undefined>(line: F, player: G, board: H) => void = (line, player, board) => {
@@ -46,7 +55,9 @@ export default function Board() {
         if (row !== 0) {
             if (tempBoard[row][line] !== "") row -= 1
             tempBoard[row][line] = player
-            set(ref(db, "board"), tempBoard)
+            // set(ref(db, "board"), tempBoard)
+            if (BoardID && !Array.isArray(BoardID))
+                SetDB.setMove(BoardID, tempBoard)
         }
 
     }

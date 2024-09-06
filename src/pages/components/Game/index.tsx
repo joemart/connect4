@@ -6,7 +6,7 @@ import Reset from "@/utils/Reset"
 import { useContext, useEffect, useState } from "react"
 import { AuthContext } from "../Context/AuthContext/AuthContext"
 
-import { getUserRef } from "@/utils/DBClass"
+import { GetDB } from "@/utils/DBClass"
 
 import { User } from "./User.type"
 
@@ -20,7 +20,7 @@ const Game = () => {
 
         const getAuth = async () => {
             if (Auth && Auth.user)
-                getUserRef(Auth.user.uid).then(snapshot => {
+                GetDB.getUserRef(Auth.user.uid).then(snapshot => {
 
                     setUser(snapshot.val())
                     setFlag(false)

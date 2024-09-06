@@ -2,40 +2,35 @@ import styles from "./chat.module.scss"
 import Person from "@/../public/person.svg"
 import Send from "@/../public/send.svg"
 import { useContext, useEffect, useState } from "react"
-import { onValue, push } from "firebase/database"
-import { db } from "@firebase/firebase"
-import { ref } from "firebase/database"
 import { AuthContext } from "@/pages/components/Context/AuthContext/AuthContext"
 import { Board } from "./Board.type"
 import { BoardIDContext } from "../components/Context/BoardIDContext/BoardIDContext"
-
-
+import { OnValueDB, PushDB } from "@/utils/DBClass"
 
 const Chat = () => {
 
     const Auth = useContext(AuthContext)
-    const BoardID = useContext(BoardIDContext)?.id
+    // const BoardID = useContext(BoardIDContext)?.id
+    const Board = useContext(BoardIDContext)
+    let BoardID: string[] | string | undefined
+    if (Board)
+        BoardID = Board.id
 
-    const chatRef = ref(db, "/boards/" + BoardID + "/chat")
-    // const usersRef = ref(db, "/boards/" + BoardID + "/users")
-    const boardRef = ref(db, "/boards/" + BoardID)
 
     const [message, setMessage] = useState("")
     const [chat, setChat] = useState<{ id: { user: string, message: string } }>()
     const [onlineUsers, setOnlineUsers] = useState<number>(0)
 
-
-
     useEffect(() => {
 
-        return onValue(chatRef, snapshot => {
+        return OnValueDB.chatBoardIDOnValue(BoardID, snapshot => {
             setChat(snapshot.val())
         })
     }, [BoardID])
 
 
     useEffect(() => {
-        return onValue(boardRef, (snapshot: { val: () => Board }) => {
+        return OnValueDB.boardOnValue(BoardID, (snapshot: { val: () => Board }) => {
             // console.log((snapshot.val().player1 ? 1 : 0) + (snapshot.val().player2 ? 1 : 0) + (snapshot.val().spectators?.length ?? 0))
             setOnlineUsers((snapshot.val().player1 ? 1 : 0) + (snapshot.val().player2 ? 1 : 0) + (snapshot.val().spectators?.length ?? 0))
         })
@@ -49,7 +44,7 @@ const Chat = () => {
 
         e.preventDefault()
         if (Auth && message !== "")
-            push(chatRef, { user: Auth?.user?.displayName, message })
+            PushDB.pushBoardIDChat(BoardID, { user: Auth?.user?.displayName, message })
         setMessage("")
     }
 
