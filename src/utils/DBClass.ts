@@ -50,7 +50,6 @@ const router = Router.router
     const getUserRef = <T extends string>(uid: T) => get(child(userRef, uid))
     const getBoardRef = <T extends string>(BoardID:T) => get(boardIDRef(BoardID))
     const getOpenLobby = () => {
-        
         return get(lobbyRef).then((boards)=>{
             let openLobbies:DataSnapshot[] = []
             boards.forEach((board)=> {
@@ -58,6 +57,44 @@ const router = Router.router
             })
             // router?.isReady ? router?.push(boardPath + "/" + openLobbies[0].key) : null
             return openLobbies[0]
+        })
+    }
+    const getOpponent = <T extends string>(name:T) =>{
+        //returns the lobbies with the specified names
+        const isNameEqual = (arg1:string, arg2: string) =>{
+            const regex = /(.*) (.*)/i
+            const match = arg1.match(regex)
+            const match2 = arg2.match(regex)
+
+            if(!match || !match2) return
+            
+            if(match[1] == match2[1]) return true
+            if(match[1] == match2[2]) return true
+            if(match[2] == match2[1]) return true
+            if(match[2] == match2[2]) return true
+        }
+
+        const areNamesEqual = (arg1:string, array:string[]) =>{
+            const regex = /(.*) (.*)/i
+            const match = arg1.match(regex)
+            return array.some(name=>{
+                const match2 = name.match(regex)
+                if(!match || !match2)return
+                if(match[1] == match2[1]) return true
+                if(match[1] == match2[2]) return true
+                if(match[2] == match2[1]) return true
+                if(match[2] == match2[2]) return true
+            })
+        }
+        return get(lobbyRef).then(boards=>{
+            let lobbies : unknown[] = []
+            boards.forEach((board)=>{
+                if(isNameEqual(board.val().player1, name) || isNameEqual(board.val().player2,name) || areNamesEqual(name, board.val().spectators)){
+                    //push the lobby keys into arrayy
+                    lobbies.push(board.key)
+                }
+            })
+            return lobbies
         })
     }
 
@@ -96,7 +133,8 @@ const router = Router.router
     const GetDB = {
         getUserRef,
         getBoardRef,
-        getOpenLobby
+        getOpenLobby,
+        getOpponent
     }
 
     const SetDB = {
