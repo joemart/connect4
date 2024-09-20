@@ -4,19 +4,24 @@ import styles from "./opponent.module.scss"
 const Opponent = <T extends { setFlag: React.Dispatch<React.SetStateAction<boolean>> }>({ setFlag }: T) => {
 
     const [text, setText] = useState("")
+    const [lobbies, setLobbies] = useState<string[]>([])
 
-    const onSubmit = () => {
-        GetDB.getOpponent(text)
+    const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        GetDB.getOpponent(text).then(async lobbies => await setLobbies(lobbies))
     }
+
+
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => setText(e.currentTarget.value)
 
     return <section className={styles["section"]}>
-        <div className={styles["close"]} onClick={() => setFlag(false)}>CLOSE</div>
+        <div onClick={() => setFlag(false)} className={styles["close"]} ></div>
         <form onSubmit={onSubmit}>
-            <input type="text" value={text} onChange={handleChange} />
+            <input type="text" value={text} placeholder={"Type opponent..."} onChange={handleChange} />
             <button>Submit</button>
         </form>
+        {lobbies.map(lobby => <div>{lobby}</div>)}
     </section>
 }
 

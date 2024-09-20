@@ -12,10 +12,8 @@ const Home = () => {
 
   useEffect(() => {
 
-    return () => {
-      if (Auth?.user)
-        router.push("/menu")
-    }
+    if (Auth && Auth.user)
+      router.push("/menu")
 
   }, [])
 

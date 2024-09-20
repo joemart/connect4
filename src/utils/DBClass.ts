@@ -1,7 +1,6 @@
 import { auth, db } from "@firebase/firebase"
-import { child, DatabaseReference, DataSnapshot, get, set, onValue, push, Query, ref, onDisconnect, update } from "firebase/database"
-import { type User, Auth, onAuthStateChanged, signOut } from "firebase/auth"
-import Router from "next/router"
+import { child, DatabaseReference, DataSnapshot, get, set, remove, onValue, push, Query, ref, onDisconnect, update } from "firebase/database"
+import { type User, onAuthStateChanged, signOut } from "firebase/auth"
 
 import { type User as ProfUser } from "@/pages/components/Profile/User.type"
 import { StaticImageData } from "next/image"
@@ -9,7 +8,6 @@ import { Board as BoardType } from "@/pages/boards/Board.type"
 
 type SnapshotCB = (snapshot:DataSnapshot)=>void
 
-const router = Router.router
 
 //variables
     const boardPath = "/boards"
@@ -19,7 +17,8 @@ const router = Router.router
     const boardTurnPath = "/turn"
 
 //refs
-    const userIDRef = <T extends ProfUser | null>(user:T)=>ref(db, usersPath + "/" + user?.uid )
+    const userIDRef = <T extends ProfUser | undefined>(user:T)=>ref(db, usersPath + "/" + user?.uid )
+    const userBoardIDRef = <T extends string>(BoardID :T, uid : T) => ref(db, boardPath + "/" + BoardID + usersPath + "/" + uid)
     const boardIDRef = <T extends string>(BoardID:T) => ref(db, boardPath + "/" + BoardID)
     const chatIDRef = <T extends string>(BoardID:T) => ref(db, boardPath + "/" + BoardID + chatPath)
     const boardIDMovesRef = <T extends string>(BoardID:T) => ref(db, boardPath + "/" + BoardID + boardMovesPath)
@@ -39,11 +38,12 @@ const router = Router.router
     //Create boardID
     const createBoardID = <T extends string | undefined>(uid:T) =>push(lobbyRef, {player1: uid, board, turn: "player1"}).key
     //Disconnect
-    const OnDisconnectMenu = <T extends ProfUser | null>(fn:(user:T)=>DatabaseReference) => (user:T) => onDisconnect(fn(user)).remove()
+    const OnDisconnectMenu =  <T extends ProfUser | undefined>(fn:(user:T)=>DatabaseReference) => async (user:T) => await onDisconnect(fn(user)).remove()
+    const OnDisconnectBoardID = (fn:(BoardID:string, uid:string)=>DatabaseReference) => async (BoardID : string, uid :string) => await onDisconnect(fn(BoardID, uid)).remove()
 
     //Auth utilities
     const utilSignOut = () => signOut(auth)
-    const utilSignOutRemoveUser = <T extends (u:ProfUser|null)=>DatabaseReference>(fn:T) => <T extends ProfUser|null>(u:T, value:unknown) => set(fn(u), value)
+    const utilSignOutRemoveUser = async <T extends (u:ProfUser|undefined)=>DatabaseReference>(fn:T) => async <T extends ProfUser|undefined>(u:T, value:unknown) => await set(fn(u), value)
     const utilOnAuthStateChanged = <T extends (u:User|null)=>void>(fn:T) => onAuthStateChanged(auth, fn)
 
     //Get ID DB
@@ -61,11 +61,14 @@ const router = Router.router
     }
     const getOpponent = <T extends string>(name:T) =>{
         //returns the lobbies with the specified names
-        const isNameEqual = (arg1:string, arg2: string) =>{
+        const isNameEqual = <T extends string | undefined>(arg1:T, arg2: T) =>{
             const regex = /(.*) (.*)/i
+            // console.log(arg1, arg2)
+            if(!arg1 || !arg2) return
             const match = arg1.match(regex)
             const match2 = arg2.match(regex)
-
+           
+            // console.log("Is name equal match " +match)
             if(!match || !match2) return
             
             if(match[1] == match2[1]) return true
@@ -74,10 +77,16 @@ const router = Router.router
             if(match[2] == match2[2]) return true
         }
 
-        const areNamesEqual = (arg1:string, array:string[]) =>{
+        const areNamesEqual = (arg1:string, array:string[] | undefined) =>{
             const regex = /(.*) (.*)/i
             const match = arg1.match(regex)
+            // console.log(arg1)
+            // console.log("Arenames equal match " + match)
+            if(!array)return
+            // console.log(arg1)
+            
             return array.some(name=>{
+                
                 const match2 = name.match(regex)
                 if(!match || !match2)return
                 if(match[1] == match2[1]) return true
@@ -87,13 +96,16 @@ const router = Router.router
             })
         }
         return get(lobbyRef).then(boards=>{
-            let lobbies : unknown[] = []
+            let lobbies : string[] = []
             boards.forEach((board)=>{
+                // getUserRef(board.val().player1).then(user => user.val().displayName)
                 if(isNameEqual(board.val().player1, name) || isNameEqual(board.val().player2,name) || areNamesEqual(name, board.val().spectators)){
                     //push the lobby keys into arrayy
+                    console.log("In IF")
                     lobbies.push(board.key)
                 }
             })
+
             return lobbies
         })
     }
@@ -106,18 +118,28 @@ const router = Router.router
     const pushPlayerIntoLobby = (lobbyKey:string, uid:string) => {
         update(child(lobbyRef, lobbyKey), {player2: uid})
     }
+    const pushUserIntoLobby = (fn:(lobbyKey:string, uid:string )=>DatabaseReference)=> (lobbyKey:string, user:ProfUser | undefined) => {
+        // console.log(user, lobbyKey)
+        if(user)
+        return set(fn(lobbyKey, user.uid), user.displayName)
+    }
+
+    //RemoveDB
+    const removeUserMenu =  <T extends (user:ProfUser | undefined)=>DatabaseReference>(fn:T) => async <T extends ProfUser>(user:T) => await remove(fn(user))
+    const removeUserBoardID = async <T extends string>(BoardID:T, uid:T) => {await remove( userBoardIDRef(BoardID, uid))}
 
     //SetDB
     const setUser = <T extends (user:ProfUser)=>DatabaseReference>(fn:T) => async (user : ProfUser, args : {displayName:string, photo:string | StaticImageData, email:string}) => await set(fn(user), args)
     const setMove = <T extends ((BoardID:string)=>DatabaseReference)>(fn:T)=> (BoardID :string, values:string[][]) => set(fn(BoardID), values )
     const setTurn = <T extends (BoardID:string)=>DatabaseReference>(fn:T) => async<T extends string, G extends string>(BoardID : T, turn : G) => await set(fn(BoardID), turn)
 
+
     //onValue
     const OnValue = (ref:DatabaseReference) => (fn:SnapshotCB) => onValue(ref, fn)
     const IDOnValue = <T extends (arg:string)=>DatabaseReference>(ref:T) => <T extends string | string[] | undefined>(BoardID : T, fn:SnapshotCB) => {
         if(!BoardID || Array.isArray(BoardID))return
         return onValue(ref(BoardID), fn)}
-
+    
 //objects
     const AuthUtil = {
         utilSignOut,
@@ -146,13 +168,20 @@ const router = Router.router
     }
 
     const DisconnectDB = {
-        MenuDC : OnDisconnectMenu(userIDRef)
+        MenuDC : OnDisconnectMenu(userIDRef),
+        BoardDC : OnDisconnectBoardID(userBoardIDRef)
     }
 
     const PushDB = {
         pushMenuChat : pushChat(chatMenuRef),
         pushBoardIDChat : pushBoardIDChat(chatIDRef),
-        pushPlayerIntoLobby
+        pushPlayerIntoLobby,
+        pushUserIntoLobby : pushUserIntoLobby(userBoardIDRef)
+    }
+
+    const RemoveDB = {
+        removeUserBoardID,
+        removeUserMenu: removeUserMenu(userIDRef)
     }
 
     const OnValueDB = {
@@ -160,7 +189,7 @@ const router = Router.router
         usersOnValue: OnValue(userRef),
         chatBoardIDOnValue : IDOnValue(chatIDRef),
         boardOnValue: IDOnValue(boardIDRef),
-        boardIDMovesOnValue : IDOnValue(boardIDMovesRef)
-    }
+        boardIDMovesOnValue : IDOnValue(boardIDMovesRef),
+   }
 
-export {createBoardID, AuthUtil, RefUtil, GetDB, OnValueDB, PushDB, SetDB, DisconnectDB}
+export {createBoardID, AuthUtil, RefUtil, GetDB, OnValueDB, PushDB, SetDB, RemoveDB, DisconnectDB}

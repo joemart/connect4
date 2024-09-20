@@ -5,6 +5,7 @@ import { AuthContext } from "../Context/AuthContext/AuthContext"
 import { createBoardID, GetDB, PushDB } from "@/utils/DBClass"
 import Opponent from "./opponent/index"
 
+
 const boardPath = "/boards"
 
 const Options = () => {
