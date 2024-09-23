@@ -17,7 +17,6 @@ import { useContext } from "react"
 
 export default function Board() {
 
-    // const BoardID = useContext(BoardIDContext)?.id
     const Board = useContext(BoardIDContext)
     let BoardID: string[] | string | undefined
     if (Board)
@@ -32,9 +31,7 @@ export default function Board() {
         ['', '', '', '', '', '', '']
     ])
 
-    // const [currPlayer, setCurrPlayer] = useState("X")
-    // const [oppPlayer, setOppPlayer] = useState("O")
-    // const [gameOver, setGameOver] = useState(false)
+
 
 
     useEffect(() => {
@@ -43,7 +40,7 @@ export default function Board() {
 
     }, [BoardID])
 
-    //player will be R or Y
+
     const UpdateBoard: <F extends number, G extends string, H extends string[][] | undefined>(line: F, player: G, board: H) => void = (line, player, board) => {
 
         let tempBoard = board

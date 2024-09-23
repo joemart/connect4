@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useRef } from "react";
 import styles from "./index.module.scss"
 
 import { BoardContext } from "@/pages/components/Context/BoardContext/BoardContext";
@@ -7,17 +7,19 @@ import { BoardIDContext } from "@/pages/components/Context/BoardIDContext/BoardI
 
 import { GetDB, SetDB } from "@/utils/DBClass";
 
-export default function Slot<T extends string, I extends number>({ cell, index }: { cell: T, index: I }) {
+export default function Slot<T extends string, I extends number>({ cell, column }: { cell: T, column: I }) {
 
     const UpdateBoard = useContext(BoardContext)?.UpdateBoard
     const board = useContext(BoardContext)?.board
     const Auth = useContext(AuthContext)
     const BoardID = useContext(BoardIDContext)?.id
 
-
+    // console.log(column)
     if (UpdateBoard)
 
         return <section onClick={() => {
+
+
 
             if (!BoardID || Array.isArray(BoardID)) return
             GetDB.getBoardRef(BoardID).then(x => {
@@ -26,7 +28,7 @@ export default function Slot<T extends string, I extends number>({ cell, index }
 
                 // console.log(x.val()[x.val()["turn"]])
                 if (UID_Turn == Auth?.user?.uid) {
-                    UpdateBoard(index
+                    UpdateBoard(column
                         , x.val().turn //authenticated player
                         , board
                     )
@@ -35,6 +37,7 @@ export default function Slot<T extends string, I extends number>({ cell, index }
                     SetDB.setTurn(BoardID, x.val()["turn"] == "player1" ? "player2" : "player1")
                 }
             })
+
 
         }} className={`${styles["section"]} ${cell == "player1" ? styles["red"] : cell == "player2" ? styles["yellow"] : ""}`}></section>
 
