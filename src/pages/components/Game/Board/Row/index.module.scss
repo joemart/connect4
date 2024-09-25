@@ -2,7 +2,7 @@
 
 .slot_wrapper{
 
-    padding:15px;
+    padding:10px;
     
     @include breakpoints.both{
         padding: 5px;
@@ -15,8 +15,6 @@
     display:flex;
     justify-content: space-around;
     align-items: center;
-    flex-direction: row;
-    // gap:clamp(0vw, 2vw, 26.5px);
-    // margin:clamp(0vw , 3vw, 20px);
+    flex-direction: column-reverse;
 
 }

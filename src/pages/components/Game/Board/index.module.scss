@@ -14,7 +14,7 @@
     border-radius: 30px;
     
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     
     @include breakpoints.phone{
         margin:0;

@@ -22,40 +22,57 @@ export default function Board() {
     if (Board)
         BoardID = Board.id
 
+
+
     const [board, setBoard] = useState([
-        ['', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '']
+        ['', '', '', '', '', ''],
+        ['', '', '', '', '', ''],
+        ['', '', '', '', '', ''],
+        ['', '', '', '', '', ''],
+        ['', '', '', '', '', ''],
+        ['', '', '', '', '', ''],
+        ['', '', '', '', '', '']
     ])
 
+    const [indexes, setIndexes] = useState<number[]>([0, 0, 0, 0, 0, 0, 0])
 
 
-
+    //board2
     useEffect(() => {
 
-        return OnValueDB.boardIDMovesOnValue(BoardID, snapshot => setBoard(snapshot.val()))
+        return OnValueDB.boardIDMovesOnValue(BoardID, snapshot => {
+            setBoard(snapshot.val())
+
+            let tempIndexes = [...indexes]
+            snapshot.val().forEach((row: string[], rowNum: number) => {
+                tempIndexes[rowNum] = row.findIndex((v: string, columnNum: number) => {
+                    if (row[columnNum] == "") {
+                        return true
+                    }
+                })
+            })
+            setIndexes(tempIndexes)
+        })
 
     }, [BoardID])
 
 
-    const UpdateBoard: <F extends number, G extends string, H extends string[][] | undefined>(line: F, player: G, board: H) => void = (line, player, board) => {
+    //Creating a better UpdateBoard
+    const UpdateBoard: <F extends number, G extends string, H extends string[][] | undefined>(column: F, player: G, board: H) => void = (column, player, board) => {
 
         let tempBoard = board
-        if (!tempBoard || !board) return
-        let row = tempBoard.findIndex((row, index) => {
-            return (row[line] !== "" || index === board.length - 1)
-        })
+        //return if tempBoard array has issues
+        if (!tempBoard || tempBoard[column][indexes[column]] == undefined) return
+        //if the cell is "", then write on it
 
-        if (row !== 0) {
-            if (tempBoard[row][line] !== "") row -= 1
-            tempBoard[row][line] = player
-            // set(ref(db, "board"), tempBoard)
-            if (BoardID && !Array.isArray(BoardID))
-                SetDB.setMove(BoardID, tempBoard)
+        if (tempBoard[column][indexes[column]] == "") {
+            tempBoard[column][indexes[column]] = player
         }
+
+
+        if (BoardID && !Array.isArray(BoardID))
+            SetDB.setMove(BoardID, tempBoard)
+
 
     }
 
@@ -65,10 +82,11 @@ export default function Board() {
         <div className={styles["board"]}>
             <BoardContext.Provider value={{ UpdateBoard, board }}>
                 {board.map((row, i) => {
-                    return <Row key={i} row={row} />
+                    return <Row key={i} row={row} column={i} />
                 })}
             </BoardContext.Provider>
-            <Controls></Controls>
-        </div></section>
+        </div>
+        <Controls></Controls>
+    </section>
 
 }

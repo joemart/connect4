@@ -1,3 +1,4 @@
+
 const board = ([
     ['', '', '', '', '', '', ''],
     ['', '', '', '', '', '', ''],
@@ -7,7 +8,8 @@ const board = ([
     ['', '', '', '', '', '', '']
 ])
 
-const indexes = [0,0,0,0,0,0]
+
+const indexes = [0,0,0,0,0,0,0]
 
 const UpdateBoard: <F extends number, G extends string, H extends string[][] | undefined>(line: F, player: G, board: H) => void = (line, player, board) => {
 
@@ -30,6 +32,7 @@ const UpdateBoard: <F extends number, G extends string, H extends string[][] | u
 
 test("Jester works", ()=> expect(1).toBe(1))
 
+
 test("Testing UpdateBoard", ()=>{
     
     expect(UpdateBoard(0,"1",board)).toEqual([
@@ -45,12 +48,13 @@ test("Testing UpdateBoard", ()=>{
 })
 
 const board2 = ([
-    ['', '', '', '', '', '', ''],
-    ['', '', '', '', '', '', ''],
-    ['', '', '', '', '', '', ''],
-    ['', '', '', '', '', '', ''],
-    ['', '', '', '', '', '', ''],
-    ['', '', '', '', '', '', '']
+    ['', '', '', '', '', ''],
+    ['', '', '', '', '', ''],
+    ['', '', '', '', '', ''],
+    ['', '', '', '', '', ''],
+    ['', '', '', '', '', ''],
+    ['', '', '', '', '', ''],
+    ['', '', '', '', '', '']
 ])
 
 const UpdateBoard2: <F extends number, G extends string, H extends string[][] | undefined>(row: F, player: G, board: H) => void = (row, player, board) => {
@@ -60,25 +64,28 @@ const UpdateBoard2: <F extends number, G extends string, H extends string[][] | 
 
     tempBoard[row][indexes[row]++] = player
     console.log(tempBoard)
+    console.log(indexes)
     return tempBoard
 }
 
 test("Testing UpdateBoard2", function(){
     expect(UpdateBoard2(0,"1", board2)).toEqual([
-        ['1', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '']
+        ['1', '', '', '', '', ''],
+        ['', '', '', '', '', ''],
+        ['', '', '', '', '', ''],
+        ['', '', '', '', '', ''],
+        ['', '', '', '', '', ''],
+        ['', '', '', '', '', ''],
+        ['', '', '', '', '', '']
     ])
 
     expect(UpdateBoard2(0,"1", board2)).toEqual([
-        ['1', '1', '', '', '', '', ''],
-        ['', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', ''],
-        ['', '', '', '', '', '', '']
+        ['1', '1', '', '', '', ''],
+        ['', '', '', '', '', ''],
+        ['', '', '', '', '', ''],
+        ['', '', '', '', '', ''],
+        ['', '', '', '', '', ''],
+        ['', '', '', '', '', ''],
+        ['', '', '', '', '', '']
     ])
 })
