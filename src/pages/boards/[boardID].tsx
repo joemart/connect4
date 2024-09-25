@@ -34,10 +34,11 @@ export default function BoardID() {
         }
 
         if (router.isReady) {
-            addUser()
+
             return OnValueDB.boardOnValue(router.query.boardID, async snapshot => {
                 if (!snapshot.exists()) router.push("/")
                 else {
+                    addUser()
                     //do something with the existing board info
                     //update DB here?
                     // console.log(snapshot.val())

@@ -14,12 +14,9 @@ export default function Slot<T extends string, I extends number>({ cell, column 
     const Auth = useContext(AuthContext)
     const BoardID = useContext(BoardIDContext)?.id
 
-    // console.log(column)
     if (UpdateBoard)
 
         return <section onClick={() => {
-
-
 
             if (!BoardID || Array.isArray(BoardID)) return
             GetDB.getBoardRef(BoardID).then(x => {

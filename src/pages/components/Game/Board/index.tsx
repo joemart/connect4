@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
 import styles from "./index.module.scss"
 
 //components
@@ -8,12 +8,7 @@ import { BoardContext } from "../../Context/BoardContext/BoardContext"
 import Controls from "./Controls"
 
 //Database
-import { db } from "@firebase/firebase"
-import { ref, onValue, set } from "firebase/database"
-
 import { OnValueDB, SetDB } from "@/utils/DBClass"
-
-import { useContext } from "react"
 
 export default function Board() {
 
@@ -21,8 +16,6 @@ export default function Board() {
     let BoardID: string[] | string | undefined
     if (Board)
         BoardID = Board.id
-
-
 
     const [board, setBoard] = useState([
         ['', '', '', '', '', ''],
@@ -37,10 +30,10 @@ export default function Board() {
     const [indexes, setIndexes] = useState<number[]>([0, 0, 0, 0, 0, 0, 0])
 
 
-    //board2
     useEffect(() => {
 
         return OnValueDB.boardIDMovesOnValue(BoardID, snapshot => {
+            if (!snapshot.exists()) return
             setBoard(snapshot.val())
 
             let tempIndexes = [...indexes]
@@ -52,9 +45,12 @@ export default function Board() {
                 })
             })
             setIndexes(tempIndexes)
+
+
         })
 
     }, [BoardID])
+
 
 
     //Creating a better UpdateBoard
@@ -73,7 +69,7 @@ export default function Board() {
         if (BoardID && !Array.isArray(BoardID))
             SetDB.setMove(BoardID, tempBoard)
 
-
+        //check win here?
     }
 
 

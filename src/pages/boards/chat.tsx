@@ -3,14 +3,14 @@ import Person from "@/../public/person.svg"
 import Send from "@/../public/send.svg"
 import { useContext, useEffect, useState } from "react"
 import { AuthContext } from "@/pages/components/Context/AuthContext/AuthContext"
-import { Board } from "./Board.type"
+
 import { BoardIDContext } from "../components/Context/BoardIDContext/BoardIDContext"
 import { OnValueDB, PushDB } from "@/utils/DBClass"
 
 const Chat = () => {
 
     const Auth = useContext(AuthContext)
-    // const BoardID = useContext(BoardIDContext)?.id
+
     const Board = useContext(BoardIDContext)
     let BoardID: string[] | string | undefined
     if (Board)
@@ -30,7 +30,8 @@ const Chat = () => {
 
 
     useEffect(() => {
-        return OnValueDB.boardOnValue(BoardID, (snapshot: { val: () => Board }) => {
+        return OnValueDB.boardOnValue(BoardID, (snapshot) => {
+            if (!snapshot.exists()) return
             // console.log((snapshot.val().player1 ? 1 : 0) + (snapshot.val().player2 ? 1 : 0) + (snapshot.val().spectators?.length ?? 0))
             setOnlineUsers((snapshot.val().player1 ? 1 : 0) + (snapshot.val().player2 ? 1 : 0) + (snapshot.val().spectators?.length ?? 0))
         })
