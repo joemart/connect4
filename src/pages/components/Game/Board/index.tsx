@@ -70,6 +70,7 @@ export default function Board() {
             SetDB.setMove(BoardID, tempBoard)
 
         //check win here?
+        //tempBoard, column and row
     }
 
 
