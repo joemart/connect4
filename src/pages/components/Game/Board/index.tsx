@@ -29,6 +29,41 @@ export default function Board() {
 
     const [indexes, setIndexes] = useState<number[]>([0, 0, 0, 0, 0, 0, 0])
 
+    const checkWin = (board: string[][], row: number, column: number) => {
+        //It will compare empty strings, beware of false positives!
+
+        const checkWinAux = (rowLimit: number, columnLimit: number) => {
+
+            if (row + rowLimit >= 0 && column + columnLimit >= 0 && row + rowLimit <= board.length && column + columnLimit <= board[0].length) {
+
+                for (let i = 1; i <= 3; i++) {
+
+                    if (board[row][column] !== board[rowLimit < 0 ? row - i : rowLimit > 0 ? row + i : row][columnLimit < 0 ? column - i : columnLimit > 0 ? column + i : column]) {
+                        break
+                    }
+
+                    //if 'i' reaches 3 and it doesn't break, then 4 pieces are the same
+                    if (i == 3) return true
+                }
+
+
+            }
+            return false
+        }
+
+        //left side
+        return checkWinAux(-3, 3)
+            || checkWinAux(-3, 0)
+            || checkWinAux(-3, -3)
+            //middle side
+            || checkWinAux(0, 3)
+            || checkWinAux(0, -3)
+            //right side
+            || checkWinAux(3, 3)
+            || checkWinAux(3, 0)
+            || checkWinAux(3, -3)
+
+    }
 
     useEffect(() => {
 
@@ -70,6 +105,8 @@ export default function Board() {
             SetDB.setMove(BoardID, tempBoard)
 
         //check win here?
+        console.log(checkWin(tempBoard, column, indexes[column]))
+
         //tempBoard, column and row
     }
 
