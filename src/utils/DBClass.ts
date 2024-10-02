@@ -15,12 +15,14 @@ type SnapshotCB = (snapshot:DataSnapshot)=>void
     const chatPath = "/chat"
     const boardMovesPath = "/board"
     const boardTurnPath = "/turn"
+    const boardWinPath = "/win"
 
 //refs
     const userIDRef = <T extends ProfUser | undefined>(user:T)=>ref(db, usersPath + "/" + user?.uid )
     const userBoardIDRef = <T extends string>(BoardID :T, uid : T) => ref(db, boardPath + "/" + BoardID + usersPath + "/" + uid)
     const boardIDRef = <T extends string>(BoardID:T) => ref(db, boardPath + "/" + BoardID)
     const chatIDRef = <T extends string>(BoardID:T) => ref(db, boardPath + "/" + BoardID + chatPath)
+    const winBoardIDRef = <T extends string>(BoardID : T) => ref(db, boardPath + "/" + BoardID  + boardWinPath)
     const boardIDMovesRef = <T extends string>(BoardID:T) => ref(db, boardPath + "/" + BoardID + boardMovesPath)
     const boardTurnRef = <T extends string>(BoardID:T) => ref(db, boardPath + "/" + BoardID + "/" + boardTurnPath)
     const userRef = ref(db, usersPath)
@@ -132,7 +134,7 @@ type SnapshotCB = (snapshot:DataSnapshot)=>void
     const setUser = <T extends (user:ProfUser)=>DatabaseReference>(fn:T) => async (user : ProfUser, args : {displayName:string, photo:string | StaticImageData, email:string}) => await set(fn(user), args)
     const setMove = <T extends ((BoardID:string)=>DatabaseReference)>(fn:T)=> (BoardID :string, values:string[][]) => set(fn(BoardID), values )
     const setTurn = <T extends (BoardID:string)=>DatabaseReference>(fn:T) => async<T extends string, G extends string>(BoardID : T, turn : G) => await set(fn(BoardID), turn)
-
+    const setWin = <T extends ((BoardID:string)=>DatabaseReference)>(fn:T) => async <T extends string, G extends boolean>(BoardID : T, win : G) => await set(fn(BoardID), win)
 
     //onValue
     const OnValue = (ref:DatabaseReference) => (fn:SnapshotCB) => onValue(ref, fn)
@@ -163,7 +165,8 @@ type SnapshotCB = (snapshot:DataSnapshot)=>void
 
         setUser: setUser(userIDRef),
         setMove: setMove(boardIDMovesRef),
-        setTurn: setTurn(boardTurnRef)
+        setTurn: setTurn(boardTurnRef),
+        setWin : setWin(winBoardIDRef)
         
     }
 
@@ -190,6 +193,7 @@ type SnapshotCB = (snapshot:DataSnapshot)=>void
         chatBoardIDOnValue : IDOnValue(chatIDRef),
         boardOnValue: IDOnValue(boardIDRef),
         boardIDMovesOnValue : IDOnValue(boardIDMovesRef),
+        boardIDWin : IDOnValue(winBoardIDRef)
    }
 
 export {createBoardID, AuthUtil, RefUtil, GetDB, OnValueDB, PushDB, SetDB, RemoveDB, DisconnectDB}

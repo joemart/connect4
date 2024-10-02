@@ -1,9 +1,12 @@
 @use "/src/styles/breakpoints.module";
 @use "/src/styles/variables.module";
-
+.win{
+        pointer-events: none;
+    }
 .wrapper{
     padding:10px;
     // width: 100%;
+
 }
 
 .board{
@@ -20,4 +23,6 @@
         margin:0;
         scale: .95;
     }
+
+
 }

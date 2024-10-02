@@ -17,7 +17,7 @@ export default function Board() {
     if (Board)
         BoardID = Board.id
 
-    const [board, setBoard] = useState([
+    const [board, setBoard] = useState<string[][]>([
         ['', '', '', '', '', ''],
         ['', '', '', '', '', ''],
         ['', '', '', '', '', ''],
@@ -26,6 +26,8 @@ export default function Board() {
         ['', '', '', '', '', ''],
         ['', '', '', '', '', '']
     ])
+
+    const [win, setWin] = useState<boolean>(false)
 
     const [indexes, setIndexes] = useState<number[]>([0, 0, 0, 0, 0, 0, 0])
 
@@ -86,7 +88,11 @@ export default function Board() {
 
     }, [BoardID])
 
-
+    useEffect(() => {
+        return OnValueDB.boardIDWin(BoardID, snapshot => {
+            setWin(snapshot.val())
+        })
+    }, [BoardID])
 
     //Creating a better UpdateBoard
     const UpdateBoard: <F extends number, G extends string, H extends string[][] | undefined>(column: F, player: G, board: H) => void = (column, player, board) => {
@@ -101,19 +107,19 @@ export default function Board() {
         }
 
 
-        if (BoardID && !Array.isArray(BoardID))
+        if (BoardID && !Array.isArray(BoardID)) {
+            //set move in DB
             SetDB.setMove(BoardID, tempBoard)
+            //check for win and update DB
+            checkWin(tempBoard, column, indexes[column]) ? SetDB.setWin(BoardID, true) : null
+        }
 
-        //check win here?
-        console.log(checkWin(tempBoard, column, indexes[column]))
-
-        //tempBoard, column and row
     }
 
 
 
-    return <section className={styles["wrapper"]}>
-        <div className={styles["board"]}>
+    return <section className={`${styles["wrapper"]} ${styles[win ? "win" : ""]}`}>
+        <div className={`${styles["board"]} `}>
             <BoardContext.Provider value={{ UpdateBoard, board }}>
                 {board.map((row, i) => {
                     return <Row key={i} row={row} column={i} />
