@@ -4,6 +4,7 @@ import { useEffect, useContext } from "react"
 import { OnValueDB, PushDB, DisconnectDB } from "@/utils/DBClass"
 import Chat from "./chat"
 import Board from "@/pages/components/Game/Board"
+import Layout from "@/pages/components/layout"
 
 import styles from "./index.module.scss"
 
@@ -58,4 +59,8 @@ export default function BoardID() {
         </BoardIDContextProvider>
 
     </section>
+}
+
+BoardID.getLayout = (page: React.ReactElement) => {
+    return <Layout>{page}</Layout>
 }
