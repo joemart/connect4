@@ -4,10 +4,8 @@ import { type User, onAuthStateChanged, signOut } from "firebase/auth"
 
 import { type User as ProfUser } from "@/pages/components/Profile/User.type"
 import { StaticImageData } from "next/image"
-import { Board as BoardType } from "@/pages/boards/Board.type"
 
 type SnapshotCB = (snapshot:DataSnapshot)=>void
-
 
 //variables
     const boardPath = "/boards"
@@ -15,12 +13,13 @@ type SnapshotCB = (snapshot:DataSnapshot)=>void
     const chatPath = "/chat"
     const boardMovesPath = "/board"
     const boardTurnPath = "/turn"
-    const boardWinPath = "/win"
+    const boardWinPath = "/winner"
 
 //refs
     const userIDRef = <T extends ProfUser | undefined>(user:T)=>ref(db, usersPath + "/" + user?.uid )
     const userBoardIDRef = <T extends string>(BoardID :T, uid : T) => ref(db, boardPath + "/" + BoardID + usersPath + "/" + uid)
     const boardIDRef = <T extends string>(BoardID:T) => ref(db, boardPath + "/" + BoardID)
+    const boardIDplayerRef = <T extends string>(BoardID:T, player:T) => ref(db, boardPath + "/" + BoardID + "/" + player)
     const chatIDRef = <T extends string>(BoardID:T) => ref(db, boardPath + "/" + BoardID + chatPath)
     const winBoardIDRef = <T extends string>(BoardID : T) => ref(db, boardPath + "/" + BoardID  + boardWinPath)
     const boardIDMovesRef = <T extends string>(BoardID:T) => ref(db, boardPath + "/" + BoardID + boardMovesPath)
@@ -28,7 +27,6 @@ type SnapshotCB = (snapshot:DataSnapshot)=>void
     const userRef = ref(db, usersPath)
     const chatMenuRef = ref(db, chatPath)
     const lobbyRef = ref(db, boardPath)
-    const usersMenuRef = ref(db, usersPath)
     
 //functions
     const board = [ ['', '', '', '', '', '', ''],
@@ -37,11 +35,25 @@ type SnapshotCB = (snapshot:DataSnapshot)=>void
                 ['', '', '', '', '', '', ''],
                 ['', '', '', '', '', '', ''],
                 ['', '', '', '', '', '', '']]
+    
+
     //Create boardID
-    const createBoardID = <T extends string | undefined>(uid:T) =>push(lobbyRef, {player1: uid, board, turn: "player1"}).key
+    const createBoardID = <T extends string | undefined>(uid:T) =>push(lobbyRef, {board, turn: "player1"}).key
+    //reset boardID
+    const resetBoardID = (fn:(BoardID:string)=>DatabaseReference) => (BoardID:string) => update(fn(BoardID), {board, turn: "player1", winner:""})
     //Disconnect
     const OnDisconnectMenu =  <T extends ProfUser | undefined>(fn:(user:T)=>DatabaseReference) => async (user:T) => await onDisconnect(fn(user)).remove()
-    const OnDisconnectBoardID = (fn:(BoardID:string, uid:string)=>DatabaseReference) => async (BoardID : string, uid :string) => await onDisconnect(fn(BoardID, uid)).remove()
+    const OnDisconnectBoardID = (fn:(BoardID:string, uid:string)=>DatabaseReference) => async (BoardID : string, uid :string) => {
+        await onDisconnect(fn(BoardID, uid)).remove()
+        const snapshot = (await get(boardIDRef(BoardID))).val()
+        if(await snapshot.player1 == uid){
+            onDisconnect(boardIDplayerRef(BoardID,"player1")).remove()
+        }
+        if(await snapshot.player2 == uid){
+            onDisconnect(boardIDplayerRef(BoardID,"player2")).remove()
+        }
+    }
+
 
     //Auth utilities
     const utilSignOut = () => signOut(auth)
@@ -111,14 +123,32 @@ type SnapshotCB = (snapshot:DataSnapshot)=>void
             return lobbies
         })
     }
+    const getWinnerName = (fn:(BoardID:string)=>DatabaseReference)=> async (BoardID:string | string[] | undefined) => {
+        if(!BoardID || Array.isArray(BoardID)) return
+        const winnerID = (await get(fn(BoardID))).val()
+        const name = (await get(userBoardIDRef(BoardID, winnerID))).val()
+        return name
+    }
 
     //PushDB
     const pushChat = (ref:DatabaseReference) => <T extends {user : string | undefined, message: string}>(args:T) => push(ref, args)
     const pushBoardIDChat = <T extends (BoardID:string)=>DatabaseReference>(fn:T) => <T extends undefined | string | string[],G extends {user : string | undefined, message: string}>(BoardID: T, args: G) => {
         if(!BoardID || Array.isArray(BoardID)) return
         return push(fn(BoardID), args)}
-    const pushPlayerIntoLobby = (lobbyKey:string, uid:string) => {
-        update(child(lobbyRef, lobbyKey), {player2: uid})
+    const pushPlayerIntoLobby = async (BoardID:string, uid:string) => {
+        const player1 = await get(boardIDplayerRef(BoardID, "player1"))
+        const player2 = await get(boardIDplayerRef(BoardID, "player2"))
+
+        //left off here
+        //if player2 doesn't exist and is different from player1 then add
+
+        if(player2.val() !== uid)
+            update(boardIDRef(BoardID), {player1:uid})
+        else if(player1.val() !== uid)
+            update(boardIDRef(BoardID), {player2:uid})
+        
+
+        // update(child(lobbyRef, BoardID), {player2: uid})
     }
     const pushUserIntoLobby = (fn:(lobbyKey:string, uid:string )=>DatabaseReference)=> (lobbyKey:string, user:ProfUser | undefined) => {
         // console.log(user, lobbyKey)
@@ -134,7 +164,7 @@ type SnapshotCB = (snapshot:DataSnapshot)=>void
     const setUser = <T extends (user:ProfUser)=>DatabaseReference>(fn:T) => async (user : ProfUser, args : {displayName:string, photo:string | StaticImageData, email:string}) => await set(fn(user), args)
     const setMove = <T extends ((BoardID:string)=>DatabaseReference)>(fn:T)=> (BoardID :string, values:string[][]) => set(fn(BoardID), values )
     const setTurn = <T extends (BoardID:string)=>DatabaseReference>(fn:T) => async<T extends string, G extends string>(BoardID : T, turn : G) => await set(fn(BoardID), turn)
-    const setWin = <T extends ((BoardID:string)=>DatabaseReference)>(fn:T) => async <T extends string, G extends boolean>(BoardID : T, win : G) => await set(fn(BoardID), win)
+    const setWinner = <T extends ((BoardID:string)=>DatabaseReference)>(fn:T) => async <T extends string, G extends string>(BoardID : T, winner : G) => await set(fn(BoardID), winner)
 
     //onValue
     const OnValue = (ref:DatabaseReference) => (fn:SnapshotCB) => onValue(ref, fn)
@@ -143,6 +173,11 @@ type SnapshotCB = (snapshot:DataSnapshot)=>void
         return onValue(ref(BoardID), fn)}
     
 //objects
+        const UtilDB = {
+            createBoardID,
+            resetBoardID: resetBoardID(boardIDRef)
+        }
+
     const AuthUtil = {
         utilSignOut,
         utilOnAuthStateChanged,
@@ -158,7 +193,8 @@ type SnapshotCB = (snapshot:DataSnapshot)=>void
         getUserRef,
         getBoardRef,
         getOpenLobby,
-        getOpponent
+        getOpponent,
+        getWinnerName: getWinnerName(winBoardIDRef)
     }
 
     const SetDB = {
@@ -166,7 +202,7 @@ type SnapshotCB = (snapshot:DataSnapshot)=>void
         setUser: setUser(userIDRef),
         setMove: setMove(boardIDMovesRef),
         setTurn: setTurn(boardTurnRef),
-        setWin : setWin(winBoardIDRef)
+        setWinner : setWinner(winBoardIDRef)
         
     }
 
@@ -196,4 +232,4 @@ type SnapshotCB = (snapshot:DataSnapshot)=>void
         boardIDWin : IDOnValue(winBoardIDRef)
    }
 
-export {createBoardID, AuthUtil, RefUtil, GetDB, OnValueDB, PushDB, SetDB, RemoveDB, DisconnectDB}
+export {UtilDB, AuthUtil, RefUtil, GetDB, OnValueDB, PushDB, SetDB, RemoveDB, DisconnectDB}

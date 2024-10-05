@@ -28,7 +28,8 @@ export default function BoardID() {
 
         async function addUser() {
             if (router.query.boardID && !Array.isArray(router.query.boardID) && Auth?.user) {
-                await PushDB.pushUserIntoLobby(router.query.boardID, Auth?.user)
+                await PushDB.pushUserIntoLobby(router.query.boardID, Auth.user)
+                await PushDB.pushPlayerIntoLobby(router.query.boardID, Auth.user.uid)
                 DisconnectDB.BoardDC(router.query.boardID, Auth?.user?.uid)
             }
         }

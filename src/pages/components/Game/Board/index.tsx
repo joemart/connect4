@@ -3,16 +3,19 @@ import styles from "./index.module.scss"
 
 //components
 import Row from "@/pages/components/Game/Board/Row"
-import { BoardIDContext } from "../../Context/BoardIDContext/BoardIDContext"
-import { BoardContext } from "../../Context/BoardContext/BoardContext"
+import { BoardIDContext } from "@/pages/components/Context/BoardIDContext/BoardIDContext"
+import { BoardContext } from "@/pages/components/Context/BoardContext/BoardContext"
 import Controls from "./Controls"
+import Winner from "@/pages/components/Winner"
 
 //Database
 import { OnValueDB, SetDB } from "@/utils/DBClass"
+import { AuthContext } from "../../Context/AuthContext/AuthContext"
 
 export default function Board() {
 
     const Board = useContext(BoardIDContext)
+    const Auth = useContext(AuthContext)
     let BoardID: string[] | string | undefined
     if (Board)
         BoardID = Board.id
@@ -27,7 +30,7 @@ export default function Board() {
         ['', '', '', '', '', '']
     ])
 
-    const [win, setWin] = useState<boolean>(false)
+    const [winner, setWinner] = useState("")
 
     const [indexes, setIndexes] = useState<number[]>([0, 0, 0, 0, 0, 0, 0])
 
@@ -90,7 +93,7 @@ export default function Board() {
 
     useEffect(() => {
         return OnValueDB.boardIDWin(BoardID, snapshot => {
-            setWin(snapshot.val())
+            setWinner(snapshot.val())
         })
     }, [BoardID])
 
@@ -111,15 +114,17 @@ export default function Board() {
             //set move in DB
             SetDB.setMove(BoardID, tempBoard)
             //check for win and update DB
-            checkWin(tempBoard, column, indexes[column]) ? SetDB.setWin(BoardID, true) : null
+            checkWin(tempBoard, column, indexes[column]) ? SetDB.setWinner(BoardID, Auth ? Auth.user ? Auth.user.uid : "" : "") : null
         }
 
     }
 
+    //display who won on their screen
 
+    return <section className={`${styles["wrapper"]} ${styles[winner ? "win" : ""]}`}>
+        {winner ? <Winner BoardID={BoardID} /> : <></>}
 
-    return <section className={`${styles["wrapper"]} ${styles[win ? "win" : ""]}`}>
-        <div className={`${styles["board"]} `}>
+        <div className={`${styles["board"]}`}>
             <BoardContext.Provider value={{ UpdateBoard, board }}>
                 {board.map((row, i) => {
                     return <Row key={i} row={row} column={i} />

@@ -1,0 +1,36 @@
+@use "@/styles/_variables.module.scss";
+
+.section{
+    background: hsla(0, 0%, 0%, 0.75);
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    inset: 0;
+
+    flex-direction: column;
+
+    font-size: clamp(1.5rem, 3.5vw , 3rem);
+    // .winner-text{
+    //     font-size: clamp(1.5rem, 3.5vw , 3rem);
+    // }
+
+    .buttons{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap:1rem;
+        
+        &>*{
+            pointer-events: all;
+            cursor: pointer;
+
+            background: variables.$button_background;
+            border: variables.$button_corner;
+            box-shadow: variables.$button_shadow;
+
+            padding: 1rem;
+            border-radius: variables.$button_corner;
+        }
+    }
+}

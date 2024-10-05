@@ -1,7 +1,7 @@
 import styles from "./index.module.scss"
 import Board from "./Board"
 import Chat from "./Chat"
-import Reset from "@/utils/Reset"
+
 
 import { useContext, useEffect, useState } from "react"
 import { AuthContext } from "../Context/AuthContext/AuthContext"
@@ -37,7 +37,7 @@ const Game = () => {
         {user ? user.displayName : "No id"}
 
         {/* Make a turn based game */}
-        <button onClick={Reset}>Reset DB</button>
+
         <Chat></Chat>
         <Board></Board>
 

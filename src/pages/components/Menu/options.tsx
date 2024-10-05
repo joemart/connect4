@@ -2,7 +2,7 @@ import styles from "./options.module.scss"
 import { useRouter } from "next/router"
 import { useContext, useState } from "react"
 import { AuthContext } from "../Context/AuthContext/AuthContext"
-import { createBoardID, GetDB, PushDB } from "@/utils/DBClass"
+import { UtilDB, GetDB, PushDB } from "@/utils/DBClass"
 import Opponent from "./opponent/index"
 
 
@@ -16,7 +16,7 @@ const Options = () => {
         let uid
         if (Auth && Auth.user)
             uid = Auth.user.uid
-        const boardID = createBoardID(uid)
+        const boardID = UtilDB.createBoardID(uid)
         router.push("/boards/" + boardID)
     }
 
