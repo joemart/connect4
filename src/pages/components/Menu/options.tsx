@@ -20,7 +20,7 @@ const Options = () => {
         router.push("/boards/" + boardID)
     }
 
-    const browseLobbies = () => {
+    const joinALobby = () => {
         // Inject player into lobby in 'player2'
         GetDB.getOpenLobby().then(snapshot => {
             //If the key or user cannot be found, return
@@ -36,7 +36,7 @@ const Options = () => {
     return <div className={styles["section_wrapper"]}><section className={styles["section"]}>
         {flag ? <Opponent setFlag={setFlag} /> : null}
         <button onClick={createLobby}>Create lobby</button>
-        <button onClick={browseLobbies}>Browse lobbies</button>
+        <button onClick={joinALobby}>Join a lobby</button>
         <button onClick={() => setFlag(true)}>Find specific lobby</button>
     </section>
     </div>

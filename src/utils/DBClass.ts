@@ -27,6 +27,7 @@ type SnapshotCB = (snapshot:DataSnapshot)=>void
     const userRef = ref(db, usersPath)
     const chatMenuRef = ref(db, chatPath)
     const lobbyRef = ref(db, boardPath)
+    const boardsRef = ref(db, boardPath)
     
 //functions
     const board = [ ['', '', '', '', '', '', ''],
@@ -129,6 +130,7 @@ type SnapshotCB = (snapshot:DataSnapshot)=>void
         const name = (await get(userBoardIDRef(BoardID, winnerID))).val()
         return name
     }
+    const getBoardUserRef = (fn:(BoardID:string, uid:string) => DatabaseReference ) => (BoardID:string, uid:string) => get(fn(BoardID, uid))
 
     //PushDB
     const pushChat = (ref:DatabaseReference) => <T extends {user : string | undefined, message: string}>(args:T) => push(ref, args)
@@ -192,6 +194,7 @@ type SnapshotCB = (snapshot:DataSnapshot)=>void
     const GetDB = {
         getUserRef,
         getBoardRef,
+        getBoardUserRef: getBoardUserRef(userBoardIDRef),
         getOpenLobby,
         getOpponent,
         getWinnerName: getWinnerName(winBoardIDRef)
@@ -229,7 +232,8 @@ type SnapshotCB = (snapshot:DataSnapshot)=>void
         chatBoardIDOnValue : IDOnValue(chatIDRef),
         boardOnValue: IDOnValue(boardIDRef),
         boardIDMovesOnValue : IDOnValue(boardIDMovesRef),
-        boardIDWin : IDOnValue(winBoardIDRef)
+        boardIDWin : IDOnValue(winBoardIDRef),
+        allBoardsValue: OnValue(boardsRef)
    }
 
 export {UtilDB, AuthUtil, RefUtil, GetDB, OnValueDB, PushDB, SetDB, RemoveDB, DisconnectDB}

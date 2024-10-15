@@ -2,6 +2,7 @@ import Layout from "@/pages/components/layout"
 import styles from "./menu.module.scss"
 import Chat from "@/pages/components/Menu/chat"
 import Options from "@/pages/components/Menu/options"
+import BrowseLobbies from "./components/Menu/Browse"
 import { useContext, useEffect } from "react"
 import { AuthContext } from "./components/Context/AuthContext/AuthContext"
 import type { User } from "./components/Profile/User.type"
@@ -38,6 +39,8 @@ const Menu = () => {
     return <section className={styles["section"]}>
         <Chat></Chat>
         <Options></Options>
+        <BrowseLobbies />
+        {/* Browse lobbies */}
     </section>
 }
 

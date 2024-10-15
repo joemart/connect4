@@ -1,0 +1,24 @@
+@use "@/styles/_variables.module.scss";
+
+.section{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    width: 100%;
+
+    padding: .3rem;
+    gap:.5rem;
+    background: variables.$blue;
+    border-radius: .5rem;
+
+    cursor: pointer;
+
+    .users{
+        display: flex;
+        justify-content: center;
+        align-items: baseline;
+        flex-direction: column;
+        flex:1;
+    }
+}
