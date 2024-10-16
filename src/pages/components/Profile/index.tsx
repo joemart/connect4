@@ -3,28 +3,31 @@ import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react
 import { AuthContext } from "../Context/AuthContext/AuthContext"
 import MyCustomLoader from "../imageLoader/CustomLoader"
 
-import { GetDB } from "@/utils/DBClass"
+import { OnValueDB } from "@/utils/DBClass"
 import Pencil from "@/../public/pencil.svg"
 
 import type { User } from "./User.type"
 
 const Profile = <T extends { openProfile: boolean, setOpenProfile: Dispatch<SetStateAction<boolean>> }>({ openProfile, setOpenProfile }: T) => {
-    const userID = "sApzFrtf6iZVLapBVCxxsBu2mEo2"
 
     const [user, setUser] = useState<User | undefined>()
 
     const regex = /(.*) (.*)/
     const match = user?.displayName.match(regex)
+    const Auth = useContext(AuthContext)
 
     useEffect(() => {
-        GetDB.getUserRef(userID).then(v => setUser(v.val()))
-    }, [])
+        return OnValueDB.menuUsersOnValue(snapshot => {
+            if (Auth && Auth.user)
+                setUser(snapshot.val()[Auth.user.uid])
+        })
+    }, [Auth?.user?.uid])
 
     return <section className={`${styles["section"]} ${styles[`${openProfile ? "profile" : "profile_hide"}`]}`} >
 
         <div className={styles["edit_profile"]}>
 
-            {user ? <MyCustomLoader src={user.photo} className={styles["image"]}></MyCustomLoader> : "N/A"}
+            {user ? <MyCustomLoader src={user.photo} className={styles["image"]} /> : "N/A"}
             <div>
                 <span className={styles["close"]} onClick={() => setOpenProfile(v => !v)}>Close</span>
                 <button>Edit profile <Pencil></Pencil></button>

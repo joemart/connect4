@@ -58,11 +58,11 @@ type SnapshotCB = (snapshot:DataSnapshot)=>void
 
     //Auth utilities
     const utilSignOut = () => signOut(auth)
-    const utilSignOutRemoveUser = async <T extends (u:ProfUser|undefined)=>DatabaseReference>(fn:T) => async <T extends ProfUser|undefined>(u:T, value:unknown) => await set(fn(u), value)
+    const utilSignOutRemoveUser =  <T extends (u:ProfUser|undefined)=>DatabaseReference>(fn:T) => async <T extends ProfUser|undefined>(u:T, value:unknown) => await set(fn(u), value)
     const utilOnAuthStateChanged = <T extends (u:User|null)=>void>(fn:T) => onAuthStateChanged(auth, fn)
 
     //Get ID DB
-    const getUserRef = <T extends string>(uid: T) => get(child(userRef, uid))
+    const getUserRef = async <T extends string>(uid: T) => await get(child(userRef, uid))
     const getBoardRef = <T extends string>(BoardID:T) => get(boardIDRef(BoardID))
     const getOpenLobby = () => {
         return get(lobbyRef).then((boards)=>{
@@ -229,6 +229,7 @@ type SnapshotCB = (snapshot:DataSnapshot)=>void
     const OnValueDB = {
         chatOnValue : OnValue(chatMenuRef),
         usersOnValue: OnValue(userRef),
+        menuUsersOnValue: OnValue(userRef),
         chatBoardIDOnValue : IDOnValue(chatIDRef),
         boardOnValue: IDOnValue(boardIDRef),
         boardIDMovesOnValue : IDOnValue(boardIDMovesRef),

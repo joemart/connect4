@@ -32,13 +32,13 @@ const Menu = () => {
             ifAuthUser(Auth.user)
         }
         return removeUser
-    }, [])
+    }, [Auth?.user?.uid])
 
 
 
     return <section className={styles["section"]}>
-        <Chat></Chat>
-        <Options></Options>
+        <Chat />
+        <Options />
         <BrowseLobbies />
         {/* Browse lobbies */}
     </section>

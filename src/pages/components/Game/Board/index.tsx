@@ -48,7 +48,10 @@ export default function Board() {
                     }
 
                     //if 'i' reaches 3 and it doesn't break, then 4 pieces are the same
-                    if (i == 3) return true
+                    if (i == 3) {
+                        //Games played +1, games won +1
+                        return true
+                    }
                 }
 
 
