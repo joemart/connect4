@@ -6,8 +6,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 10px 0;
+    padding: 0 10px 2rem;
     @include breakpoints.phone(){
         flex-direction: column;
+        gap:.8rem;
     }
 }

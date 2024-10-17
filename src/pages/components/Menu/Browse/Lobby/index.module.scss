@@ -11,6 +11,10 @@
     gap:.5rem;
     background: variables.$blue;
     border-radius: .5rem;
+    transition: 1s all;
+    &:hover{
+        background:variables.$button_hover_color;
+    }
 
     cursor: pointer;
 

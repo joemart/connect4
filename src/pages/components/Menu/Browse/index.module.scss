@@ -1,11 +1,20 @@
+@use "@/styles/_variables.module.scss";
+
 .section{
-    width: 400px;
+    // width: 500px;
+    height: 80%;
+    border-radius: .5rem;
+    outline: 10px solid variables.$blue;
+    padding:1rem;
+    // color:black;
+    background: variables.$browse_background_blue;
 
     display: flex;
     justify-content: center;
     align-items: center;
     gap:.5rem;
     flex-direction: column;
-
-
+    flex: 1 1 300px;
+    
+    
 }

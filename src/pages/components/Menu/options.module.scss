@@ -19,7 +19,7 @@
 
     gap:10px;
 
-    
+
 
     button{
 
@@ -37,5 +37,11 @@
         @include breakpoints.phone{
             height:60px;
         }
+
+        transition: 1s all;
+
+            &:hover{
+        background: variables.$button_hover_color;
+    }
     }
 }
