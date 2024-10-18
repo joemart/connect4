@@ -1,5 +1,3 @@
-import { channel } from "diagnostics_channel"
-
 const board = ([
     ['', '', '', '', '', '', ''],
     ['', '', '', '', '', '', ''],

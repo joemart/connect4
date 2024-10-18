@@ -29,7 +29,7 @@ const config: Config = {
   // An array of glob patterns indicating a set of files for which coverage information should be collected
   //Ignore files (i.e. '!src/**/...') go after the file pattern that you want
   collectCoverageFrom: [
-    "src/**/*.{ts,tsx}",
+    "src/**/*.(spec|test).{ts,tsx}",
     "!src/**/_{app,document}.tsx",
     "!src/**/api/*",
     "!src/**/*.types.{ts,tsx}"
