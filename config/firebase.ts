@@ -31,6 +31,8 @@ const firebaseConfig = dev? {
   measurementId: process.env.MEASUREMENT_ID,
   databaseURL: "https://connect-4-94fab-default-rtdb.firebaseio.com/"
 };
+console.log(dev)
+console.log(process.env)
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
