@@ -1,9 +1,9 @@
-import { useContext, useRef } from "react";
+import { useContext } from "react";
 import styles from "./index.module.scss"
 
-import { BoardContext } from "@/pages/components/Context/BoardContext/BoardContext";
-import { AuthContext } from "@/pages/components/Context/AuthContext/AuthContext";
-import { BoardIDContext } from "@/pages/components/Context/BoardIDContext/BoardIDContext";
+import BoardContext from "@/pages/components/Context/BoardContext";
+import { AuthContext } from "@/pages/components/Context/AuthContext";
+import { BoardIDContext } from "@/pages/components/Context/BoardIDContext";
 
 import { GetDB, SetDB } from "@/utils/DBClass";
 

@@ -1,3 +1,5 @@
+
+
 const board = ([
     ['', '', '', '', '', '', ''],
     ['', '', '', '', '', '', ''],
@@ -395,3 +397,4 @@ test("Test checkWinUpdated", ()=>{
     expect(checkWinUpdated(board6, 2,3)).toBe(true)
     expect(checkWinUpdated(board6, 1,4)).toBe(true)
 })
+

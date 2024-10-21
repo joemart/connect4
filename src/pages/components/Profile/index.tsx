@@ -1,12 +1,12 @@
 import styles from "./index.module.scss"
 import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react"
-import { AuthContext } from "../Context/AuthContext/AuthContext"
+import { AuthContext } from "../Context/AuthContext"
 import MyCustomLoader from "../imageLoader/CustomLoader"
 
 import { OnValueDB } from "@/utils/DBClass"
 import Pencil from "@/../public/pencil.svg"
 
-import type { User } from "./User.type"
+import type User from "./User"
 
 const Profile = <T extends { openProfile: boolean, setOpenProfile: Dispatch<SetStateAction<boolean>> }>({ openProfile, setOpenProfile }: T) => {
 

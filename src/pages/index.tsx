@@ -3,7 +3,7 @@ import Layout from "./components/layout";
 import { useRouter } from "next/router";
 import styles from "./index.module.scss"
 import { useEffect, useContext } from "react";
-import { AuthContext } from "./components/Context/AuthContext/AuthContext";
+import { AuthContext } from "./components/Context/AuthContext";
 
 const Home = () => {
 

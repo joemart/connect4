@@ -4,11 +4,11 @@ import Chat from "./Chat"
 
 
 import { useContext, useEffect, useState } from "react"
-import { AuthContext } from "../Context/AuthContext/AuthContext"
+import { AuthContext } from "../Context/AuthContext"
 
 import { GetDB } from "@/utils/DBClass"
 
-import { User } from "./User.type"
+import User from "./User"
 
 const Game = () => {
 

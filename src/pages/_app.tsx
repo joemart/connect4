@@ -1,7 +1,7 @@
 import "@/styles/global.scss"
 import type { AppProps } from 'next/app'
 import { NextPage } from 'next'
-import { AuthContextProvider } from "./components/Context/AuthContext/AuthContext"
+import AuthContextProvider from "./components/Context/AuthContext"
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: React.ReactElement) => React.ReactNode

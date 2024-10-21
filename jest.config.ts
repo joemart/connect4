@@ -149,7 +149,7 @@ const config: Config = {
   // setupFiles: [],
   // setupFiles: ['<rootDir>/jest.polyfills.ts'],
   // A list of paths to modules that run some code to configure or set up the testing framework before each test
-  setupFilesAfterEnv: [],
+  // setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 //   setupFilesAfterEnv: ['<rootDir>/jest.setup2.ts'],
   
 
@@ -160,7 +160,8 @@ const config: Config = {
   // snapshotSerializers: [],
 
   // The test environment that will be used for testing
-  testEnvironment: "node",
+  // testEnvironment: "node",
+  testEnvironment: 'jest-environment-jsdom',
 
   // Options that will be passed to the testEnvironment
   // testEnvironmentOptions: {},

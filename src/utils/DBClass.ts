@@ -2,7 +2,7 @@ import { auth, db } from "@firebase/firebase"
 import { child, DatabaseReference, DataSnapshot, get, set, remove, onValue, push, Query, ref, onDisconnect, update } from "firebase/database"
 import { type User, onAuthStateChanged, signOut } from "firebase/auth"
 
-import { type User as ProfUser } from "@/pages/components/Profile/User.type"
+import  type ProfUser from "@/pages/components/Profile/User"
 import { StaticImageData } from "next/image"
 
 type SnapshotCB = (snapshot:DataSnapshot)=>void

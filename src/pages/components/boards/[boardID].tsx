@@ -8,8 +8,8 @@ import Layout from "@/pages/components/layout"
 
 import styles from "./index.module.scss"
 
-import { BoardIDContextProvider } from "../components/Context/BoardIDContext/BoardIDContext"
-import { AuthContext } from "../components/Context/AuthContext/AuthContext"
+import BoardIDContextProvider from "../Context/BoardIDContext"
+import { AuthContext } from "../Context/AuthContext"
 
 
 //Log in user in DB when joining
@@ -21,7 +21,7 @@ export default function BoardID() {
     const router = useRouter()
     const Auth = useContext(AuthContext)
 
-
+    //use getStaticProps? getServerSideProps?
 
 
     //check if the boardID exists

@@ -1,7 +1,7 @@
 import styles from "./options.module.scss"
 import { useRouter } from "next/router"
 import { useContext, useState } from "react"
-import { AuthContext } from "../Context/AuthContext/AuthContext"
+import { AuthContext } from "../Context/AuthContext"
 import { UtilDB, GetDB, PushDB } from "@/utils/DBClass"
 import Opponent from "./opponent/index"
 

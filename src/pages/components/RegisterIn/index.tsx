@@ -9,7 +9,7 @@ import { set, ref, onDisconnect } from "firebase/database"
 import MyCustomLoader from "@/pages/components/imageLoader/CustomLoader"
 import { useRouter } from "next/router"
 import { useContext } from "react"
-import { AuthContext } from "../Context/AuthContext/AuthContext"
+import { AuthContext } from "../Context/AuthContext"
 
 export default function RegisterIn() {
 

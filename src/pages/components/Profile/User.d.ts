@@ -1,8 +1,9 @@
 import { StaticImageData } from "next/image"
 
-export type User ={
+type User ={
     uid : string,
     displayName: string,
     email : string,
     photo : string | StaticImageData
 }
+export default User

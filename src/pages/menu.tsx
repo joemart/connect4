@@ -4,8 +4,8 @@ import Chat from "@/pages/components/Menu/chat"
 import Options from "@/pages/components/Menu/options"
 import BrowseLobbies from "./components/Menu/Browse"
 import { useContext, useEffect } from "react"
-import { AuthContext } from "./components/Context/AuthContext/AuthContext"
-import type { User } from "./components/Profile/User.type"
+import { AuthContext } from "./components/Context/AuthContext"
+import type User from "./components/Profile/User"
 import { SetDB, DisconnectDB, RemoveDB } from "@/utils/DBClass"
 
 

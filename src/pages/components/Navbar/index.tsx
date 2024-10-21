@@ -1,6 +1,6 @@
 import styles from "./index.module.scss"
 import { useContext, useEffect, useState } from "react"
-import { AuthContext } from "../Context/AuthContext/AuthContext"
+import { AuthContext } from "../Context/AuthContext"
 import { useRouter } from "next/router"
 import Profile from "@/pages/components/Profile"
 

@@ -3,14 +3,14 @@ import styles from "./index.module.scss"
 
 //components
 import Row from "@/pages/components/Game/Board/Row"
-import { BoardIDContext } from "@/pages/components/Context/BoardIDContext/BoardIDContext"
-import { BoardContext } from "@/pages/components/Context/BoardContext/BoardContext"
+import { BoardIDContext } from "@/pages/components/Context/BoardIDContext"
+import BoardContext from "@/pages/components/Context/BoardContext"
 import Controls from "./Controls"
 import Winner from "@/pages/components/Winner"
 
 //Database
 import { OnValueDB, SetDB } from "@/utils/DBClass"
-import { AuthContext } from "../../Context/AuthContext/AuthContext"
+import { AuthContext } from "../../Context/AuthContext"
 
 export default function Board() {
 

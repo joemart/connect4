@@ -3,7 +3,7 @@ import Person from "@/../public/person.svg"
 import Send from "@/../public/send.svg"
 import { useContext, useEffect, useState } from "react"
 import { OnValueDB, PushDB } from "@/utils/DBClass"
-import { AuthContext } from "../Context/AuthContext/AuthContext"
+import { AuthContext } from "../Context/AuthContext"
 
 
 const Chat = () => {

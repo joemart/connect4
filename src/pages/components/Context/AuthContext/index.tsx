@@ -1,15 +1,15 @@
 import { createContext, useEffect, useState } from "react";
 
-import { AuthType } from "./Auth.types";
+import AuthType from "./Auth";
 import { useRouter } from "next/router";
-import { type User as ProfUser } from "../../Profile/User.type";
+import type ProfUser from "../../Profile/User";
 import { AuthUtil } from "@/utils/DBClass";
 
 export const AuthContext = createContext<AuthType | undefined>(undefined)
 
 
 
-export const AuthContextProvider = <T extends { children: React.ReactNode }>({ children }: T): React.ReactNode => {
+const AuthContextProvider = <T extends { children: React.ReactNode }>({ children }: T): React.ReactNode => {
 
     const [user, setUser] = useState<ProfUser | null>(null)
     const router = useRouter()
@@ -56,4 +56,4 @@ export const AuthContextProvider = <T extends { children: React.ReactNode }>({ c
 
 }
 
-
+export default AuthContextProvider

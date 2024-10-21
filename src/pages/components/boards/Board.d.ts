@@ -1,5 +1,5 @@
 //Using as a blueprint?
-export type Board = {
+type Board = {
     player1: string,
     player2: string,
     chat: {
@@ -7,3 +7,5 @@ export type Board = {
     },
     spectators: string[]
 }
+
+export default Board
