@@ -4,7 +4,7 @@ import styles from "./index.module.scss"
 //components
 import Row from "@/pages/components/Game/Board/Row"
 import { BoardIDContext } from "@/pages/components/Context/BoardIDContext"
-import BoardContext from "@/pages/components/Context/BoardContext"
+import { BoardContext } from "@/pages/components/Context/BoardContext"
 import Controls from "./Controls"
 import Winner from "@/pages/components/Winner"
 

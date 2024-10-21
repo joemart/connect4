@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import styles from "./index.module.scss"
 
-import BoardContext from "@/pages/components/Context/BoardContext";
+import { BoardContext } from "@/pages/components/Context/BoardContext";
 import { AuthContext } from "@/pages/components/Context/AuthContext";
 import { BoardIDContext } from "@/pages/components/Context/BoardIDContext";
 

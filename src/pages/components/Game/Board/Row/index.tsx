@@ -9,9 +9,9 @@ export default function Row<T extends string[], G extends number>({ row, column 
 
     return (
         <section className={styles["row"]}>
-            {row.map((cell, i) => {
+            {row ? row.map((cell, i) => {
                 return <div className={styles["slot_wrapper"]}><Slot key={i} cell={cell} column={column} /></div>
-            })}
+            }) : ""}
         </section>
     );
 }
