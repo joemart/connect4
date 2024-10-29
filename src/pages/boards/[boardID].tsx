@@ -8,8 +8,8 @@ import Layout from "@/pages/components/layout"
 
 import styles from "./index.module.scss"
 
-import BoardIDContextProvider from "../Context/BoardIDContext"
-import { AuthContext } from "../Context/AuthContext"
+import BoardIDContextProvider from "../components/Context/BoardIDContext"
+import { AuthContext } from "../components/Context/AuthContext"
 
 
 //Log in user in DB when joining

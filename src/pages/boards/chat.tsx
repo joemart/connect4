@@ -4,7 +4,7 @@ import Send from "@/../public/send.svg"
 import { useContext, useEffect, useState } from "react"
 import { AuthContext } from "@/pages/components/Context/AuthContext"
 
-import { BoardIDContext } from "../Context/BoardIDContext"
+import { BoardIDContext } from "../components/Context/BoardIDContext"
 import { OnValueDB, PushDB } from "@/utils/DBClass"
 
 const Chat = () => {
