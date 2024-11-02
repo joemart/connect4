@@ -21,7 +21,6 @@ const BrowseLobbies = () => {
     const [lobbies, setLobbies] = useState<Lobbies>()
 
     useEffect(() => {
-        console.log("browse use effect")
         return OnValueDB.allBoardsValue(snapshot => {
             setLobbies(snapshot.val())
         })

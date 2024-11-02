@@ -1,10 +1,7 @@
-import { useState } from "react"
-import Link from "next/link"
+import { useEffect, useState } from "react"
 import styles from "./index.module.scss"
-import { GoogleAuthProvider, signInWithPopup, signInWithRedirect } from "firebase/auth"
+import { GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
 import { auth } from "@firebase/firebase"
-import { db } from "@firebase/firebase"
-import { set, ref, onDisconnect } from "firebase/database"
 
 import MyCustomLoader from "@/pages/components/imageLoader/CustomLoader"
 import { useRouter } from "next/router"
@@ -14,30 +11,31 @@ import { AuthContext } from "../Context/AuthContext"
 export default function RegisterIn() {
 
 
-
+    const [isMobile, setIsMobile] = useState(false)
+    const ScreenSize = 700
     const router = useRouter()
     const [values, setValues] = useState({
         email: "",
         password: ""
     })
+    const [signInValues, setSignInValues] = useState({
+        email: "",
+        password: ""
+    })
+
+    const [isLogin, setIsLogin] = useState(false)
+
     const reRoute = "/"
 
-
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleCreateAccountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setValues(v => { return { ...v, [e.target.name]: e.target.value } })
     }
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault()
-
-        const url = ""
-        const requestOptions = {}
-
-        fetch(url, requestOptions)
-            .then(() => console.log("Submitted"))
-            .catch(e => console.log(e))
+    const handleSignInChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSignInValues(v => { return { ...v, [e.target.name]: e.target.value } })
     }
+
+
 
     const Auth = useContext(AuthContext)
 
@@ -62,31 +60,83 @@ export default function RegisterIn() {
 
     }
 
-    return <section className={styles["section"]}>
-        <div className={styles["container"]}>
+    const handleSignUp = (e: React.FormEvent) => {
+        e.preventDefault()
+        createUserWithEmailAndPassword(auth, values.email, values.password).then(() => {
+            router.push(reRoute)
+        })
+
+    }
+
+    const handleLogIn = (e: React.FormEvent) => {
+        e.preventDefault()
+        signInWithEmailAndPassword(auth, signInValues.email, signInValues.password).then(() => {
+            router.push(reRoute)
+        })
+    }
+
+    const Mobile = () => {
+        return isMobile ? <div className={styles["signUpWithPhone"]}>
+            Sign up with Phone
+            <MyCustomLoader className={styles["Icon"]} src={"phoneIcon.svg"}></MyCustomLoader>
+        </div> : <></>
+    }
+
+    const SignUp = () => {
+        return <form className={styles["inputCredentials"]} onSubmit={handleSignUp}>
+
+            {(Object.entries(values).map(([name, value]) => {
+
+                return <>
+                    <label htmlFor={name}>{name}</label>
+                    <input type={name == "email" ? "email" : "password"} id={name} name={name} value={value} onChange={handleCreateAccountChange} />
+                </>
+            }))}
+            <button type="submit">Create</button>
+        </form>
+    }
+
+    const CreateAccount = () => {
+        return <>
             <h1>Create account</h1>
-            <form className={styles["inputCredentials"]} >
-                {(Object.entries(values).map(([name, value]) => {
-                    return <>
-                        <label htmlFor={name}>{name}</label>
-                        <input type={name == "email" ? "email" : "text"} id={name} name={name} value={value} onChange={handleChange} />
-                    </>
-                }))}
-                <button type="submit">Register</button>
-            </form>
+            {SignUp()}
             <div className={styles["divider"]} />
             <div className={styles["signUpWithGoogle"]} onClick={handleGoogle}>
                 Sign up with Google
                 <MyCustomLoader className={styles["Icon"]} src={"googleIcon.svg"}></MyCustomLoader>
             </div>
-            <div className={styles["signUpWithPhone"]}>
-                Sign up with Phone
-                <MyCustomLoader className={styles["Icon"]} src={"phoneIcon.svg"}></MyCustomLoader>
-            </div>
+            <Mobile />
             <div className={styles["divider"]} />
-            <Link href={"/login"}>Log in</Link>
-        </div>
+            <div className={styles["logInSignIn"]} onClick={() => setIsLogin(true)}>Log in</div>
+        </>
+    }
 
+    const LogIn = () => {
+        return <>
+            <h1>Log In</h1>
+            <form className={styles["inputCredentials"]} onSubmit={handleLogIn}>
+                {Object.entries(signInValues).map(([name, value]) => {
+                    return <>
+                        <label htmlFor={name}>{name}</label>
+                        <input type={name == "email" ? "email" : "password"} id={name} name={name} value={value} onChange={handleSignInChange} />
+                    </>
+                })}
+                <button type="submit">Log In</button>
+            </form>
+            <div className={styles["divider"]} />
+            <div className={styles["logInSignIn"]} onClick={() => setIsLogin(false)}>Create account</div>
+        </>
+    }
+
+
+    useEffect(() => {
+        setIsMobile(window.innerWidth < ScreenSize ? true : false)
+    }, [])
+
+    return <section className={styles["section"]}>
+        <div className={styles["container"]}>
+            {isLogin ? <>{LogIn()}</> : <>{CreateAccount()}</>}
+        </div>
     </section>
 }
 

@@ -1,3 +1,4 @@
+"use client"
 import { createContext, useEffect, useState } from "react";
 
 import AuthType from "./Auth";
@@ -29,10 +30,12 @@ const AuthContextProvider = <T extends { children: React.ReactNode }>({ children
 
     useEffect(() => {
         return AuthUtil.utilOnAuthStateChanged(async (u) => {
-            // console.log(u)
+
             if (u) {
+
                 // onDisconnect(ref(db, "/users/" + u.uid)).remove()
-                await setUser({ displayName: u.displayName as string, email: u.email as string, photo: u.photoURL as string, uid: u.uid })
+                await setUser({ displayName: u.displayName as string || "John Doe", email: u.email as string, photo: u.photoURL as string, uid: u.uid as string })
+
             } else {
                 await setUser(null)
                 router.push("/")

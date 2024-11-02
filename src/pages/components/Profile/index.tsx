@@ -13,10 +13,12 @@ const Profile = <T extends { openProfile: boolean, setOpenProfile: Dispatch<SetS
     const [user, setUser] = useState<User | undefined>()
 
     const regex = /(.*) (.*)/
-    const match = user?.displayName.match(regex)
+
     const Auth = useContext(AuthContext)
+    const match = Auth?.user?.displayName.match(regex)
 
     useEffect(() => {
+
         return OnValueDB.menuUsersOnValue(snapshot => {
             if (Auth && Auth.user && snapshot.exists())
                 setUser(snapshot.val()[Auth.user.uid])
