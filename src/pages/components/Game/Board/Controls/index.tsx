@@ -7,9 +7,9 @@ import Drop from "./Drop"
 const Controls = () => {
 
     return <section className={styles["section"]}>
-        <Left />
+        {/* <Left /> */}
         <Drop />
-        <Right />
+        {/* <Right /> */}
     </section>
 }
 

@@ -2,8 +2,12 @@
 
 .section{
     display: flex;
+    justify-content: center;
+    align-items: center;
     gap:83px;
     padding: 10px;
+
+
 
     @include breakpoints.phone{
         gap:32px;

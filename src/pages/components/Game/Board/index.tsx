@@ -19,6 +19,7 @@ export default function Board() {
     let BoardID: string[] | string | undefined
     if (Board)
         BoardID = Board.id
+    const [column, setColumn] = useState(0)
 
     const [board, setBoard] = useState<string[][]>([
         ['', '', '', '', '', ''],
@@ -74,6 +75,12 @@ export default function Board() {
     }
 
     useEffect(() => {
+        return OnValueDB.boardIDWin(BoardID, snapshot => {
+            setWinner(snapshot.val())
+        })
+    }, [BoardID])
+
+    useEffect(() => {
 
         return OnValueDB.boardIDMovesOnValue(BoardID, snapshot => {
             if (!snapshot.exists()) return
@@ -94,11 +101,9 @@ export default function Board() {
 
     }, [BoardID])
 
-    useEffect(() => {
-        return OnValueDB.boardIDWin(BoardID, snapshot => {
-            setWinner(snapshot.val())
-        })
-    }, [BoardID])
+
+
+
 
     //Creating a better UpdateBoard
     const UpdateBoard: <F extends number, G extends string, H extends string[][] | undefined>(column: F, player: G, board: H) => void = (column, player, board) => {
@@ -126,15 +131,16 @@ export default function Board() {
 
     return <section className={`${styles["wrapper"]} ${styles[winner ? "win" : ""]}`}>
         {winner ? <Winner BoardID={BoardID} /> : <></>}
+        <BoardContext.Provider value={{ UpdateBoard, board, column, setColumn }}>
 
-        <div className={`${styles["board"]}`}>
-            <BoardContext.Provider value={{ UpdateBoard, board }}>
+            <div className={`${styles["board"]}`}>
                 {board.map((row, i) => {
                     return <Row key={i} row={row} column={i} />
                 })}
-            </BoardContext.Provider>
-        </div>
-        <Controls></Controls>
+
+            </div>
+            <Controls />
+        </BoardContext.Provider>
     </section>
 
 }

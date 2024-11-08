@@ -17,4 +17,8 @@
     align-items: center;
     flex-direction: column-reverse;
 
+    &:hover{
+
+        background: hsl(80, 100%, 60%);
+    }
 }
