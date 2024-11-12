@@ -30,21 +30,27 @@ export default function BoardID() {
         async function addUser() {
             if (router.query.boardID && !Array.isArray(router.query.boardID) && Auth?.user) {
                 await PushDB.pushUserIntoLobby(router.query.boardID, Auth.user)
-                await PushDB.pushPlayerIntoLobby(router.query.boardID, Auth.user.uid)
-                DisconnectDB.BoardDC(router.query.boardID, Auth?.user?.uid)
+                await PushDB.pushPlayerIntoGame(router.query.boardID, Auth.user.uid)
+                DisconnectDB.BoardDC(router.query.boardID, Auth.user.uid)
+            }
+        }
+
+        async function addSpectator() {
+            if (router.query.boardID && !Array.isArray(router.query.boardID) && Auth?.user) {
+                await PushDB.pushUserIntoLobby(router.query.boardID, Auth.user)
+                await PushDB.pushBoardSpectators(router.query.boardID, Auth.user.uid)
+                DisconnectDB.SpectatorDC(router.query.boardID, Auth.user.uid)
             }
         }
 
         if (router.isReady) {
 
             return OnValueDB.boardOnValue(router.query.boardID, async snapshot => {
+                console.log(snapshot.val().player1)
                 if (!snapshot.exists()) router.push("/")
-                else {
-                    addUser()
-                    //do something with the existing board info
-                    //update DB here?
-                    // console.log(snapshot.val())
-                }
+                else if (snapshot.val().player1 !== undefined && snapshot.val().player2 !== undefined) {
+                    addSpectator()
+                } else addUser()
             })
         }
     }, [router.isReady, Auth?.user?.uid])

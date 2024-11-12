@@ -13,10 +13,8 @@ const Options = () => {
     const Auth = useContext(AuthContext)
     const [flag, setFlag] = useState(false)
     const createLobby = () => {
-        let uid
-        if (Auth && Auth.user)
-            uid = Auth.user.uid
-        const boardID = UtilDB.createBoardID(uid)
+
+        const boardID = UtilDB.createBoardID()
         router.push("/boards/" + boardID)
     }
 
@@ -26,11 +24,10 @@ const Options = () => {
             //If the key or user cannot be found, return
             if (!(snapshot.key && Auth && Auth.user)) return
             //Push the player into the lobby
-            PushDB.pushPlayerIntoLobby(snapshot.key, Auth.user.uid)
+            PushDB.pushPlayerIntoGame(snapshot.key, Auth.user.uid)
             //Move player to the lobby
             router.push(boardPath + "/" + snapshot.key)
         })
-
     }
 
     return <div className={styles["section_wrapper"]}><section className={styles["section"]}>
