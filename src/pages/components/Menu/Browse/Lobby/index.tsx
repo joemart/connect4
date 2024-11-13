@@ -2,12 +2,14 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/router"
 import styles from "./index.module.scss"
 import { GetDB } from "@/utils/DBClass"
+import { UserKey } from "@/pages/components/Menu/Browse"
 
-const Lobby = <T extends { LobbyNumber: number, BoardID: string, player1: string, player2: string, spectators: number }>({ LobbyNumber, BoardID, player1, player2, spectators }: T) => {
+const Lobby = <T extends { LobbyNumber: number, BoardID: string, player1: UserKey[keyof UserKey], player2: UserKey[keyof UserKey], spectators: UserKey[] }>({ LobbyNumber, BoardID, player1, player2, spectators }: T) => {
 
     const [name1, setName1] = useState("")
     const [name2, setName2] = useState("")
     const router = useRouter()
+
 
     useEffect(() => {
         GetDB.getBoardUserRef(BoardID, player1).then(v => {
@@ -30,7 +32,7 @@ const Lobby = <T extends { LobbyNumber: number, BoardID: string, player1: string
         <div className={styles["users"]}>
             <span>Player1: {name1}</span>
             <span>Player2: {name2}</span>
-            <span>Spectators: {spectators}</span>
+            <span>Spectators: {spectators ? Object.keys(spectators).length : 0}</span>
         </div>
     </section>
 }

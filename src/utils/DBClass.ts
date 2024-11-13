@@ -14,6 +14,7 @@ type SnapshotCB = (snapshot:DataSnapshot)=>void
     const boardMovesPath = "/board"
     const boardTurnPath = "/turn"
     const boardWinPath = "/winner"
+    const boardSpectatorsPath = "/spectators"
 
 //refs
     const userIDRef = <T extends ProfUser | undefined>(user:T)=>ref(db, usersPath + "/" + user?.uid )
@@ -24,6 +25,7 @@ type SnapshotCB = (snapshot:DataSnapshot)=>void
     const winBoardIDRef = <T extends string>(BoardID : T) => ref(db, boardPath + "/" + BoardID  + boardWinPath)
     const boardIDMovesRef = <T extends string>(BoardID:T) => ref(db, boardPath + "/" + BoardID + boardMovesPath)
     const boardTurnRef = <T extends string>(BoardID:T) => ref(db, boardPath + "/" + BoardID + "/" + boardTurnPath)
+    const boardIDSpectatorsRef = <T extends string>(BoardID : T, uid : T) => ref(db, boardPath + "/" + BoardID + "/" + boardSpectatorsPath + "/" + uid)
     const userRef = ref(db, usersPath)
     const chatMenuRef = ref(db, chatPath)
     const lobbyRef = ref(db, boardPath)
@@ -39,7 +41,7 @@ type SnapshotCB = (snapshot:DataSnapshot)=>void
     
 
     //Create boardID
-    const createBoardID = <T extends string | undefined>(uid:T) =>push(lobbyRef, {board, turn: "player1"}).key
+    const createBoardID = () =>push(lobbyRef, {board, turn: "player1", spectators:[]}).key
     //reset boardID
     const resetBoardID = (fn:(BoardID:string)=>DatabaseReference) => (BoardID:string) => update(fn(BoardID), {board, turn: "player1", winner:""})
     //Disconnect
@@ -53,6 +55,10 @@ type SnapshotCB = (snapshot:DataSnapshot)=>void
         if(await snapshot.player2 == uid){
             onDisconnect(boardIDplayerRef(BoardID,"player2")).remove()
         }
+    }
+    const OnDisconnectBoardIDSpectator = <T extends ((BoardID:string, uid:string)=>DatabaseReference)>(fn:T) => async <T extends string>(BoardID :T, uid :T) => {
+        await onDisconnect(fn(BoardID, uid)).remove()
+        await onDisconnect(boardIDSpectatorsRef(BoardID,uid)).remove()
     }
 
 
@@ -137,23 +143,28 @@ type SnapshotCB = (snapshot:DataSnapshot)=>void
     const pushBoardIDChat = <T extends (BoardID:string)=>DatabaseReference>(fn:T) => <T extends undefined | string | string[],G extends {user : string | undefined, message: string}>(BoardID: T, args: G) => {
         if(!BoardID || Array.isArray(BoardID)) return
         return push(fn(BoardID), args)}
-    const pushPlayerIntoLobby = async (BoardID:string, uid:string) => {
+    
+    const pushBoardSpectators = <T extends ((BoardID:string, uid:string) => DatabaseReference)>(fn:T) => async <T extends string>(BoardID : T, uid : T) =>{
+        const spectator = (await get(userBoardIDRef(BoardID, uid))).val()
+        await set(fn(BoardID, uid), spectator)
+    }
+
+    const pushPlayerIntoGame = async (BoardID:string, uid:string) => {
         const player1 = await get(boardIDplayerRef(BoardID, "player1"))
         const player2 = await get(boardIDplayerRef(BoardID, "player2"))
 
-        //left off here
         //if player2 doesn't exist and is different from player1 then add
 
-        if(player2.val() !== uid)
+        if(player2.val() !== uid && player2.val() == null)
             update(boardIDRef(BoardID), {player1:uid})
-        else if(player1.val() !== uid)
+        else if(player1.val() !== uid && player2.val() == null)
             update(boardIDRef(BoardID), {player2:uid})
-        
-
-        // update(child(lobbyRef, BoardID), {player2: uid})
+        // else pushBoardSpectators(boardIDSpectatorsRef)(BoardID,uid)
     }
+
+
     const pushUserIntoLobby = (fn:(lobbyKey:string, uid:string )=>DatabaseReference)=> (lobbyKey:string, user:ProfUser | undefined) => {
-        // console.log(user, lobbyKey)
+
         if(user)
         return set(fn(lobbyKey, user.uid), user.displayName)
     }
@@ -211,14 +222,16 @@ type SnapshotCB = (snapshot:DataSnapshot)=>void
 
     const DisconnectDB = {
         MenuDC : OnDisconnectMenu(userIDRef),
-        BoardDC : OnDisconnectBoardID(userBoardIDRef)
+        BoardDC : OnDisconnectBoardID(userBoardIDRef),
+        SpectatorDC : OnDisconnectBoardIDSpectator(userBoardIDRef)
     }
 
     const PushDB = {
         pushMenuChat : pushChat(chatMenuRef),
         pushBoardIDChat : pushBoardIDChat(chatIDRef),
-        pushPlayerIntoLobby,
-        pushUserIntoLobby : pushUserIntoLobby(userBoardIDRef)
+        pushPlayerIntoGame,
+        pushUserIntoLobby : pushUserIntoLobby(userBoardIDRef),
+        pushBoardSpectators : pushBoardSpectators(boardIDSpectatorsRef)
     }
 
     const RemoveDB = {
