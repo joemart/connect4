@@ -1,4 +1,3 @@
-import Game from "./components/Game";
 import Layout from "./components/layout";
 import { useRouter } from "next/router";
 import styles from "./index.module.scss"
