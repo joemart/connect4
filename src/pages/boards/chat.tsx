@@ -20,6 +20,7 @@ const Chat = () => {
     const [message, setMessage] = useState("")
     const [chat, setChat] = useState<{ id: { user: string, message: string } }>()
     const [onlineUsers, setOnlineUsers] = useState<number>(0)
+    const [availableSeat, setAvailableSeat] = useState(false)
 
     useEffect(() => {
 
@@ -32,10 +33,25 @@ const Chat = () => {
     useEffect(() => {
         return OnValueDB.boardOnValue(BoardID, (snapshot) => {
             if (!snapshot.exists()) return
-            // console.log((snapshot.val().player1 ? 1 : 0) + (snapshot.val().player2 ? 1 : 0) + (snapshot.val().spectators?.length ?? 0))
+
             setOnlineUsers((snapshot.val().player1 ? 1 : 0) + (snapshot.val().player2 ? 1 : 0) + (snapshot.val().spectators?.length ?? 0))
         })
     }, [onlineUsers, BoardID])
+
+    useEffect(() => {
+        return OnValueDB.boardOnValue(BoardID, snapshot => {
+
+            if (!snapshot.exists()) return
+            if (!Auth || !Auth.user) return
+
+            if (snapshot.val().player1 == Auth.user.uid
+                || snapshot.val().player2 == Auth.user.uid) return
+
+            if (snapshot.val().player1 == undefined || snapshot.val().player2 == undefined)
+                setAvailableSeat(true)
+            else setAvailableSeat(false)
+        })
+    }, [availableSeat, BoardID])
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setMessage(e.target.value)
@@ -47,6 +63,17 @@ const Chat = () => {
         if (Auth && message !== "")
             PushDB.pushBoardIDChat(BoardID, { user: Auth?.user?.displayName, message })
         setMessage("")
+    }
+
+    const handleSeat = () => {
+        if (!Auth || !Auth.user) return
+        if (Array.isArray(BoardID) || !BoardID) return
+
+        PushDB.pushPlayerIntoGame(BoardID, Auth.user.uid)
+    }
+
+    const Seat = () => {
+        return <button onClick={handleSeat}>Sit</button>
     }
 
     return <section className={styles["section"]}>
@@ -68,6 +95,9 @@ const Chat = () => {
             </form>
 
         </div>
+
+        {/* Sit up from table */}
+        {availableSeat ? <Seat /> : <></>}
         {/* <div className={styles["surrender"]}>Surrender</div> */}
 
     </section>

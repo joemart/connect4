@@ -46,7 +46,7 @@ export default function BoardID() {
         if (router.isReady) {
 
             return OnValueDB.boardOnValue(router.query.boardID, async snapshot => {
-                console.log(snapshot.val().player1)
+
                 if (!snapshot.exists()) router.push("/")
                 else if (snapshot.val().player1 !== undefined && snapshot.val().player2 !== undefined) {
                     addSpectator()
