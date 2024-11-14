@@ -158,7 +158,7 @@ type SnapshotCB = (snapshot:DataSnapshot)=>void
             set(fn(BoardID, "player1"), uid)
         else if(player2.val() == null && player1.val() !== uid)
             set(fn(BoardID, "player2"), uid)
-        
+
     }
 
     const pushUserIntoLobby = (fn:(lobbyKey:string, uid:string )=>DatabaseReference)=> (lobbyKey:string, user:ProfUser | undefined) => {

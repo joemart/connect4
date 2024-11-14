@@ -44,10 +44,11 @@ const Chat = () => {
             if (!snapshot.exists()) return
             if (!Auth || !Auth.user) return
 
-            if (snapshot.val().player1 == Auth.user.uid
-                || snapshot.val().player2 == Auth.user.uid) return
 
-            if (snapshot.val().player1 == undefined || snapshot.val().player2 == undefined)
+            if ((snapshot.val().player1 !== Auth.user.uid
+                && snapshot.val().player2 == undefined)
+                || (snapshot.val().player2 !== Auth.user.uid
+                    && snapshot.val().player1 == undefined))
                 setAvailableSeat(true)
             else setAvailableSeat(false)
         })
@@ -79,7 +80,7 @@ const Chat = () => {
     return <section className={styles["section"]}>
         <div className={styles["person_wrapper"]}>
             <div className={styles["person"]}>
-                <Person></Person>
+                <Person />
                 <div className={styles["online_people"]}>{onlineUsers}</div>
             </div>
         </div>
