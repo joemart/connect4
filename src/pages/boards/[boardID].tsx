@@ -1,7 +1,7 @@
 import { useRouter } from "next/router"
 import { useEffect, useContext } from "react"
 
-import { OnValueDB, PushDB, DisconnectDB } from "@/utils/DBClass"
+import { OnValueDB, PushDB, DisconnectDB, GetDB } from "@/utils/DBClass"
 import Chat from "./chat"
 import Board from "@/pages/components/Game/Board"
 import Layout from "@/pages/components/layout"
@@ -31,7 +31,7 @@ export default function BoardID() {
             if (router.query.boardID && !Array.isArray(router.query.boardID) && Auth?.user) {
                 await PushDB.pushUserIntoLobby(router.query.boardID, Auth.user)
                 await PushDB.pushPlayerIntoGame(router.query.boardID, Auth.user.uid)
-                DisconnectDB.BoardDC(router.query.boardID, Auth.user.uid)
+                await DisconnectDB.BoardDC(router.query.boardID, Auth.user.uid)
             }
         }
 
@@ -39,21 +39,26 @@ export default function BoardID() {
             if (router.query.boardID && !Array.isArray(router.query.boardID) && Auth?.user) {
                 await PushDB.pushUserIntoLobby(router.query.boardID, Auth.user)
                 await PushDB.pushBoardSpectators(router.query.boardID, Auth.user.uid)
-                DisconnectDB.SpectatorDC(router.query.boardID, Auth.user.uid)
+                await DisconnectDB.SpectatorDC(router.query.boardID, Auth.user.uid)
             }
         }
 
-        if (router.isReady) {
+        async function addUserOrSpectator() {
+            if (!router.query.boardID || Array.isArray(router.query.boardID) || !Auth || !Auth.user) return
+            const snapshot = (await GetDB.getBoardRef(router.query.boardID)).val()
 
-            return OnValueDB.boardOnValue(router.query.boardID, async snapshot => {
+            if ((snapshot.player1 == undefined && snapshot.player2 == undefined)
+                || (snapshot.player1 == Auth.user.uid && snapshot.player2 == undefined)
+                || snapshot.player2 == Auth.user.uid && snapshot.player1 == undefined)
+                await addUser()
 
-                if (!snapshot.exists()) router.push("/")
-                else if (snapshot.val().player1 !== undefined && snapshot.val().player2 !== undefined) {
-                    addSpectator()
-                } else addUser()
-            })
+            if (snapshot.player1 && snapshot.player2)
+                await addSpectator()
         }
-    }, [router.isReady, Auth?.user?.uid])
+
+        addUserOrSpectator()
+
+    }, [router.isReady])
 
 
 
