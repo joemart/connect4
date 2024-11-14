@@ -84,12 +84,11 @@ type SnapshotCB = (snapshot:DataSnapshot)=>void
         //returns the lobbies with the specified names
         const isNameEqual = <T extends string | undefined>(arg1:T, arg2: T) =>{
             const regex = /(.*) (.*)/i
-            // console.log(arg1, arg2)
+
             if(!arg1 || !arg2) return
             const match = arg1.match(regex)
             const match2 = arg2.match(regex)
-           
-            // console.log("Is name equal match " +match)
+
             if(!match || !match2) return
             
             if(match[1] == match2[1]) return true
@@ -122,7 +121,7 @@ type SnapshotCB = (snapshot:DataSnapshot)=>void
                 // getUserRef(board.val().player1).then(user => user.val().displayName)
                 if(isNameEqual(board.val().player1, name) || isNameEqual(board.val().player2,name) || areNamesEqual(name, board.val().spectators)){
                     //push the lobby keys into arrayy
-                    console.log("In IF")
+                    
                     lobbies.push(board.key)
                 }
             })
@@ -149,19 +148,18 @@ type SnapshotCB = (snapshot:DataSnapshot)=>void
         await set(fn(BoardID, uid), spectator)
     }
 
-    const pushPlayerIntoGame = async (BoardID:string, uid:string) => {
-        const player1 = await get(boardIDplayerRef(BoardID, "player1"))
-        const player2 = await get(boardIDplayerRef(BoardID, "player2"))
+    const pushPlayerIntoGame = <T extends (BoardID :string, player:string)=>DatabaseReference>(fn:T)=>async (BoardID:string, uid:string) => {
+        const player1 = await get(fn(BoardID, "player1"))
+        const player2 = await get(fn(BoardID, "player2"))
 
         //if player2 doesn't exist and is different from player1 then add
 
-        if(player2.val() !== uid && player2.val() == null)
-            update(boardIDRef(BoardID), {player1:uid})
-        else if(player1.val() !== uid && player2.val() == null)
-            update(boardIDRef(BoardID), {player2:uid})
-        // else pushBoardSpectators(boardIDSpectatorsRef)(BoardID,uid)
+        if(player1.val() == null && player2.val() !== uid )
+            set(fn(BoardID, "player1"), uid)
+        else if(player2.val() == null && player1.val() !== uid)
+            set(fn(BoardID, "player2"), uid)
+        
     }
-
 
     const pushUserIntoLobby = (fn:(lobbyKey:string, uid:string )=>DatabaseReference)=> (lobbyKey:string, user:ProfUser | undefined) => {
 
@@ -172,6 +170,9 @@ type SnapshotCB = (snapshot:DataSnapshot)=>void
     //RemoveDB
     const removeUserMenu =  <T extends (user:ProfUser | undefined)=>DatabaseReference>(fn:T) => async <T extends ProfUser>(user:T) => await remove(fn(user))
     const removeUserBoardID = async <T extends string>(BoardID:T, uid:T) => {await remove( userBoardIDRef(BoardID, uid))}
+    const removeSpectatorBoardID = <T extends (BoardID:string, uid:string)=> DatabaseReference>(fn:T) => <T extends string>(BoardID : T, uid : T) =>{
+        remove(fn(BoardID, uid))
+    }
 
     //SetDB
     const setUser = <T extends (user:ProfUser)=>DatabaseReference>(fn:T) => async (user : ProfUser, args : {displayName:string, photo:string | StaticImageData, email:string}) => await set(fn(user), args)
@@ -229,14 +230,15 @@ type SnapshotCB = (snapshot:DataSnapshot)=>void
     const PushDB = {
         pushMenuChat : pushChat(chatMenuRef),
         pushBoardIDChat : pushBoardIDChat(chatIDRef),
-        pushPlayerIntoGame,
+        pushPlayerIntoGame: pushPlayerIntoGame(boardIDplayerRef),
         pushUserIntoLobby : pushUserIntoLobby(userBoardIDRef),
         pushBoardSpectators : pushBoardSpectators(boardIDSpectatorsRef)
     }
 
     const RemoveDB = {
         removeUserBoardID,
-        removeUserMenu: removeUserMenu(userIDRef)
+        removeUserMenu: removeUserMenu(userIDRef),
+        removeSpectatorBoardID: removeSpectatorBoardID(boardIDSpectatorsRef)
     }
 
     const OnValueDB = {
