@@ -1,7 +1,7 @@
 import { useRouter } from "next/router"
 import { useEffect, useContext } from "react"
 
-import { OnValueDB, PushDB, DisconnectDB, GetDB } from "@/utils/DBClass"
+import { PushDB, DisconnectDB, GetDB, RemoveDB } from "@/utils/DBClass"
 import Chat from "./chat"
 import Board from "@/pages/components/Game/Board"
 import Layout from "@/pages/components/layout"
@@ -56,7 +56,21 @@ export default function BoardID() {
                 await addSpectator()
         }
 
+        async function removeUserOrSpectator() {
+            if (!router.query.boardID || Array.isArray(router.query.boardID) || !Auth || !Auth.user) return
+            const snapshot = (await GetDB.getBoardRef(router.query.boardID)).val()
+
+            if (snapshot.player1 == Auth.user.uid)
+                await RemoveDB.removePlayerBoardID(router.query.boardID, "player1")
+            if (snapshot.player2 == Auth.user.uid)
+                await RemoveDB.removePlayerBoardID(router.query.boardID, "player2")
+            await RemoveDB.removeSpectatorBoardID(router.query.boardID, Auth.user.uid)
+            await RemoveDB.removeUserBoardID(router.query.boardID, Auth.user.uid)
+        }
+
         addUserOrSpectator()
+
+        return () => { removeUserOrSpectator() }
 
     }, [router.isReady])
 

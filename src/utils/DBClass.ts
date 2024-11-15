@@ -169,9 +169,8 @@ type SnapshotCB = (snapshot:DataSnapshot)=>void
 
     //RemoveDB
     const removeUserMenu =  <T extends (user:ProfUser | undefined)=>DatabaseReference>(fn:T) => async <T extends ProfUser>(user:T) => await remove(fn(user))
-    const removeUserBoardID = async <T extends string>(BoardID:T, uid:T) => {await remove( userBoardIDRef(BoardID, uid))}
-    const removeSpectatorBoardID = <T extends (BoardID:string, uid:string)=> DatabaseReference>(fn:T) => <T extends string>(BoardID : T, uid : T) =>{
-        remove(fn(BoardID, uid))
+    const removeFromBoardID = <T extends (BoardID:string, uid:string)=>DatabaseReference>(fn:T) => async <T extends string>(BoardID:T, uid:T)=>{
+        await remove(fn(BoardID,uid))
     }
 
     //SetDB
@@ -236,9 +235,10 @@ type SnapshotCB = (snapshot:DataSnapshot)=>void
     }
 
     const RemoveDB = {
-        removeUserBoardID,
         removeUserMenu: removeUserMenu(userIDRef),
-        removeSpectatorBoardID: removeSpectatorBoardID(boardIDSpectatorsRef)
+        removeUserBoardID : removeFromBoardID(userBoardIDRef),
+        removeSpectatorBoardID: removeFromBoardID(boardIDSpectatorsRef),
+        removePlayerBoardID: removeFromBoardID(boardIDplayerRef)
     }
 
     const OnValueDB = {
