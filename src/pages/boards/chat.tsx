@@ -1,7 +1,7 @@
 import styles from "./chat.module.scss"
 import Person from "@/../public/person.svg"
 import Send from "@/../public/send.svg"
-import { useContext, useEffect, useState } from "react"
+import { MutableRefObject, useContext, useEffect, useRef, useState } from "react"
 import { AuthContext } from "@/pages/components/Context/AuthContext"
 
 import { BoardIDContext } from "../components/Context/BoardIDContext"
@@ -21,6 +21,14 @@ const Chat = () => {
     const [chat, setChat] = useState<{ id: { user: string, message: string } }>()
     const [onlineUsers, setOnlineUsers] = useState<number>(0)
     const [availableSeat, setAvailableSeat] = useState(false)
+    const chatRef = useRef<HTMLDivElement>(null)
+
+    //useEffect that scrolls to the bottom of the chat on new chat message
+    useEffect(() => {
+        if (chatRef.current)
+            chatRef.current.scrollIntoView({ behavior: "smooth", block: "end" })
+
+    }, [chat])
 
     useEffect(() => {
 
@@ -85,7 +93,7 @@ const Chat = () => {
             </div>
         </div>
         <div className={styles["chat_wrapper"]}>
-            <div className={styles["chat"]}>
+            <div className={styles["chat"]} ref={chatRef}>
                 {chat ? Object.values(chat).map(c => <div>{c.user} : {c.message}</div>) : <></>}
             </div>
         </div>

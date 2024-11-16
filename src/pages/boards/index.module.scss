@@ -13,6 +13,7 @@
 
     @include breakpoints.phone{
         flex-direction: column-reverse;
+        height: 100%;
     }
     @include breakpoints.medium{
         flex-direction: column-reverse;
