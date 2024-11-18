@@ -6,6 +6,8 @@
     display: flex;
     justify-content: center;
     padding:10px;
+
+
 }
 
 .section{
@@ -18,7 +20,9 @@
     flex-direction: column;
 
     gap:10px;
-
+    @include breakpoints.phone(){
+        flex-direction: row;
+    }
 
 
     button{

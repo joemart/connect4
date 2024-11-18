@@ -1,4 +1,5 @@
 @use "@/styles/_variables.module.scss";
+@use "@/styles/_breakpoints.module.scss";
 
 .section{
     // width: 500px;
@@ -15,5 +16,7 @@
     flex-direction: column;
     flex: 1 1 300px;
     
-    
+    @include breakpoints.phone(){
+        flex:unset;
+    }
 }
